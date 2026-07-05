@@ -41,7 +41,7 @@ Cloudflare Pages settings:
 
 - Build command: `npm run build`
 - Build output directory: `dist`
-- Node.js: `24` (`.node-version`)
+- Node.js: `26` (`.node-version`)
 
 The project includes `public/_redirects`; Cloudflare Pages should deploy it as `_redirects` in the generated site.
 

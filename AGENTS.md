@@ -61,7 +61,7 @@ Notes:
 ## Deployment Assumptions
 
 - Cloudflare Pages is the provisional hosting target.
-- Use Node.js 24 LTS. The repository pins this with `.node-version`.
+- Use Node.js 26.x. The repository pins this with `.node-version`.
 - `_redirects` is part of the deployment contract and must be present in `dist/`.
 - RSS compatibility requires `/index.xml` to redirect to `/rss.xml`.
 - Sitemap generation must continue to work.
