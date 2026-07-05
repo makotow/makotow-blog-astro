@@ -10,11 +10,14 @@ Use this checklist after pushing `makotow/makotow-blog-astro` to GitHub.
 - Deploy command: `npm run deploy`
 - Node.js version: `26`
 - Preview URL: `https://makotow-blog-astro.makotow.workers.dev/`
+- Production custom domain: `blog.makotow.net`
 
 The repository pins Node.js with `.node-version`, and `wrangler.jsonc` configures static assets:
 
 - `workers_dev`: `true`
 - `preview_urls`: `true`
+- `routes[0].pattern`: `blog.makotow.net`
+- `routes[0].custom_domain`: `true`
 - `assets.directory`: `./dist`
 - `assets.not_found_handling`: `404-page`
 
@@ -83,7 +86,22 @@ After the first deployment succeeds:
 
 Do this only after preview checks pass.
 
-- Add custom domain: `blog.makotow.net`
-- Confirm DNS records Cloudflare asks for.
-- Confirm the production deployment serves the custom domain.
-- Re-check old URLs and RSS after the custom domain is active.
+The production custom domain is declared in `wrangler.jsonc`:
+
+```jsonc
+"routes": [
+  {
+    "pattern": "blog.makotow.net",
+    "custom_domain": true
+  }
+]
+```
+
+After the PR adding the route is merged:
+
+1. Confirm Cloudflare Workers Builds deploys `main` successfully.
+2. Open Workers & Pages > `makotow-blog-astro` > Settings > Domains & Routes.
+3. Confirm `blog.makotow.net` is attached as a custom domain.
+4. Confirm DNS records Cloudflare asks for, if any.
+5. Confirm the production deployment serves the custom domain.
+6. Re-check old URLs and RSS after the custom domain is active.
