@@ -12,6 +12,8 @@ Use this checklist after pushing `makotow/makotow-blog-astro` to GitHub.
 
 The repository pins Node.js with `.node-version`, so Cloudflare Pages should use Node 26 when the build image honors version files.
 
+This project is deployed as a static Astro site. Do not add the `@astrojs/cloudflare` adapter or `wrangler` unless the site is intentionally changed to use Cloudflare Workers or on-demand rendering.
+
 ## Connect Repository
 
 1. Open Cloudflare Dashboard.
@@ -22,6 +24,8 @@ The repository pins Node.js with `.node-version`, so Cloudflare Pages should use
 6. Use the build settings above.
 7. Run the first deployment.
 
+If the setup screen asks for a deploy command such as `npx wrangler deploy`, you are likely creating a Workers project instead of a Pages project. Go back and select the Pages tab.
+
 ## First Deployment Checks
 
 - `/` returns 200.
@@ -31,6 +35,25 @@ The repository pins Node.js with `.node-version`, so Cloudflare Pages should use
 - `/index.xml` redirects to `/rss.xml`.
 - A legacy `/post/YYYY/MM/DD/:slug/` URL redirects to the matching canonical article URL.
 - Article pages with `ogImage` render the image under the title.
+
+## Troubleshooting
+
+### Astro tries to install `@astrojs/cloudflare` and `wrangler`
+
+This means Cloudflare is running `astro add cloudflare` or a Workers-oriented deploy flow. It is not required for this static site.
+
+Use the Pages dashboard flow instead:
+
+- Product: Cloudflare Pages
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Deploy command: leave unset
+
+Do not use:
+
+- `npm run astro add cloudflare`
+- `npx astro add cloudflare`
+- `npx wrangler deploy`
 
 ## PR Preview Checks
 
