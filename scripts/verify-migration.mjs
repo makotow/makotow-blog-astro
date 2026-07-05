@@ -121,18 +121,23 @@ function legacyPostPathFor(canonicalPath) {
 function expectedPostsFromAstro() {
   return walk(astroPostsRoot, filePath => /\.(md|mdx)$/.test(filePath))
     .sort()
-    .map(filePath => {
+    .flatMap(filePath => {
       const source = fs.readFileSync(filePath, "utf8");
       const { frontmatter } = splitFrontmatter(source, filePath);
+      if (frontmatter.draft) return [];
       const canonicalPath = canonicalPathForAstroPost(filePath);
       const slug = path.parse(filePath).name;
-      return {
-        title: String(frontmatter.title ?? slug).trim(),
-        source: path.relative(repoRoot, filePath),
-        canonicalPath,
-        legacyPostPath: legacyPostPathFor(canonicalPath),
-        aliases: cleanStringArray(frontmatter.aliases).map(ensureLeadingSlash),
-      };
+      return [
+        {
+          title: String(frontmatter.title ?? slug).trim(),
+          source: path.relative(repoRoot, filePath),
+          canonicalPath,
+          legacyPostPath: legacyPostPathFor(canonicalPath),
+          aliases: cleanStringArray(frontmatter.aliases).map(
+            ensureLeadingSlash
+          ),
+        },
+      ];
     });
 }
 
