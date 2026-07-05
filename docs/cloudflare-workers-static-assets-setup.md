@@ -9,15 +9,19 @@ Use this checklist after pushing `makotow/makotow-blog-astro` to GitHub.
 - Build command: `npm run build`
 - Deploy command: `npm run deploy`
 - Node.js version: `26`
+- Preview URL: `https://makotow-blog-astro.makotow.workers.dev/`
 
 The repository pins Node.js with `.node-version`, and `wrangler.jsonc` configures static assets:
 
+- `workers_dev`: `true`
+- `preview_urls`: `true`
 - `assets.directory`: `./dist`
 - `assets.not_found_handling`: `404-page`
 
 This project is deployed as a static Astro site. Do not add the `@astrojs/cloudflare` adapter unless the site is intentionally changed to use Astro on-demand rendering or Cloudflare runtime bindings.
 
 The deploy script runs `wrangler deploy --no-autoconfig` to prevent Wrangler from trying to run `astro add cloudflare`.
+`workers_dev` and `preview_urls` are explicitly enabled so Wrangler does not warn about default deployment behavior.
 
 ## Connect Repository
 
