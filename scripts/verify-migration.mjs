@@ -3,8 +3,11 @@ import path from "node:path";
 import YAML from "yaml";
 
 const repoRoot = path.resolve(import.meta.dirname, "..");
-const hugoRoot = path.resolve(repoRoot, "../makotow-blog-hugo");
+const hugoRoot = process.env.HUGO_ROOT
+  ? path.resolve(process.env.HUGO_ROOT)
+  : path.resolve(repoRoot, "../makotow-blog-hugo");
 const hugoPostsRoot = path.join(hugoRoot, "content/post");
+const astroPostsRoot = path.join(repoRoot, "src/content/posts");
 const distRoot = path.join(repoRoot, "dist");
 const publicRedirectsPath = path.join(repoRoot, "public/_redirects");
 const distRedirectsPath = path.join(distRoot, "_redirects");
@@ -80,7 +83,7 @@ function getEffectiveSlug(frontmatter, sourceDir) {
   return slug || path.basename(sourceDir);
 }
 
-function expectedPosts() {
+function expectedPostsFromHugo() {
   return walk(hugoPostsRoot, filePath => path.basename(filePath) === "index.md")
     .sort()
     .map(filePath => {
@@ -103,6 +106,46 @@ function expectedPosts() {
         aliases: cleanStringArray(frontmatter.aliases).map(ensureLeadingSlash),
       };
     });
+}
+
+function canonicalPathForAstroPost(filePath) {
+  const relativePath = path.relative(astroPostsRoot, filePath);
+  const parsed = path.parse(relativePath);
+  return `/${parsed.dir}/${parsed.name}/`;
+}
+
+function legacyPostPathFor(canonicalPath) {
+  return `/post${canonicalPath}`;
+}
+
+function expectedPostsFromAstro() {
+  return walk(astroPostsRoot, filePath => /\.(md|mdx)$/.test(filePath))
+    .sort()
+    .map(filePath => {
+      const source = fs.readFileSync(filePath, "utf8");
+      const { frontmatter } = splitFrontmatter(source, filePath);
+      const canonicalPath = canonicalPathForAstroPost(filePath);
+      const slug = path.parse(filePath).name;
+      return {
+        title: String(frontmatter.title ?? slug).trim(),
+        source: path.relative(repoRoot, filePath),
+        canonicalPath,
+        legacyPostPath: legacyPostPathFor(canonicalPath),
+        aliases: cleanStringArray(frontmatter.aliases).map(ensureLeadingSlash),
+      };
+    });
+}
+
+function expectedPosts() {
+  if (fs.existsSync(hugoPostsRoot)) {
+    return { sourceInventory: "hugo", posts: expectedPostsFromHugo() };
+  }
+  if (fs.existsSync(astroPostsRoot)) {
+    return { sourceInventory: "astro", posts: expectedPostsFromAstro() };
+  }
+  throw new Error(
+    `Missing post sources: ${hugoPostsRoot} and ${astroPostsRoot}`
+  );
 }
 
 function parseRedirects(filePath) {
@@ -197,7 +240,8 @@ function writeReports(summary, results) {
     "## Summary",
     "",
     `- Result: ${summary.failed === 0 ? "PASS" : "FAIL"}`,
-    `- Hugo posts: ${summary.posts}`,
+    `- Source inventory: ${summary.sourceInventory}`,
+    `- Posts: ${summary.posts}`,
     `- Canonical files OK: ${summary.canonicalFilesOk}/${summary.posts}`,
     `- Canonical HTTP OK: ${summary.httpSkipped ? "skipped" : `${summary.canonicalHttpOk}/${summary.posts}`}`,
     `- Redirect rules OK: ${summary.redirectRulesOk}/${summary.redirectRulesExpected}`,
@@ -216,15 +260,13 @@ function writeReports(summary, results) {
 }
 
 async function main() {
-  if (!fs.existsSync(hugoPostsRoot))
-    throw new Error(`Missing Hugo posts: ${hugoPostsRoot}`);
   if (!fs.existsSync(distRoot))
     throw new Error("Missing dist/. Run npm run build first.");
   if (!fs.existsSync(publicRedirectsPath)) {
     throw new Error(`Missing redirects file: ${publicRedirectsPath}`);
   }
 
-  const posts = expectedPosts();
+  const { sourceInventory, posts } = expectedPosts();
   const publicRedirects = parseRedirects(publicRedirectsPath);
   const distRedirects = fs.existsSync(distRedirectsPath)
     ? parseRedirects(distRedirectsPath)
@@ -325,6 +367,7 @@ async function main() {
   });
 
   const summary = {
+    sourceInventory,
     posts: posts.length,
     canonicalFilesOk: results.filter(
       row => row.type === "canonical-file" && row.result === "PASS"
@@ -348,7 +391,8 @@ async function main() {
   writeReports(summary, results);
 
   console.log(`Migration URL check: ${summary.failed === 0 ? "PASS" : "FAIL"}`);
-  console.log(`Hugo posts: ${summary.posts}`);
+  console.log(`Source inventory: ${summary.sourceInventory}`);
+  console.log(`Posts: ${summary.posts}`);
   console.log(
     `Canonical files OK: ${summary.canonicalFilesOk}/${summary.posts}`
   );
