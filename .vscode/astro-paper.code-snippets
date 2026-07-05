@@ -1,0 +1,33 @@
+{
+  "Blog frontmatter": {
+    "scope": "markdown",
+    "prefix": "frontmatter",
+    "body": [
+      "---",
+      "author: \"makotow\"",
+      "pubDatetime: $CURRENT_YEAR-$CURRENT_MONTH-${CURRENT_DATE}",
+      "title: \"$1\"",
+      "draft: ${2|false,true|}",
+      "tags:",
+      "  - \"$3\"",
+      "categories:",
+      "  - \"$4\"",
+      "description: \"$5\"",
+      "timezone: \"Asia/Tokyo\"",
+      "---",
+    ],
+    "description": "Adds the frontmatter block for blog.makotow.net posts",
+  },
+  "Blog Template": {
+    "scope": "markdown",
+    "prefix": "template",
+    "body": [
+      "${1:frontmatter}",
+      "",
+      "${2:Introductory sentence}",
+      "",
+      "## ${3:Heading}",
+    ],
+    "description": "Adds a simple blog post body template",
+  },
+}

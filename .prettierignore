@@ -1,0 +1,28 @@
+# Ignore everything
+/*
+
+# Except these files & folders
+!/src
+!/scripts
+!/public
+!/.github
+!CLAUDE.md
+!tsconfig.json
+!astro.config.ts
+!astro-paper.config.ts
+!package.json
+!.prettierrc
+!eslint.config.js
+!README.md
+!.vscode
+
+# Migrated content is validated by migration/content checks. Avoid mechanical
+# reflow of preserved article bodies.
+/src/content/posts
+
+# Generated assets and reports
+/public/pagefind
+/reports
+
+# Ignore MDX files
+*.mdx

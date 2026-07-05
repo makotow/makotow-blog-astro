@@ -1,0 +1,53 @@
+name: CI
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+  workflow_call:
+
+jobs:
+  quality:
+    name: Build and quality gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Build site
+        run: npm run build
+
+      - name: Verify migrated URLs and redirects
+        run: npm run verify:migration
+
+      - name: Review migrated content inventory
+        run: npm run review:content
+
+      - name: Check internal links
+        run: npm run verify:links
