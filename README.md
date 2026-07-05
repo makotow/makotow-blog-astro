@@ -6,7 +6,7 @@ The migration keeps the existing public URL contract:
 
 - Canonical article URLs stay on `/YYYY/MM/DD/:slug/`.
 - Legacy `/post/YYYY/MM/DD/:slug/` URLs redirect to canonical article URLs.
-- Hugo aliases and `/index.xml` redirect through `public/_redirects` for Cloudflare Pages.
+- Hugo aliases and `/index.xml` redirect through `public/_redirects` for Cloudflare Static Assets.
 - RSS is generated at `/rss.xml`.
 
 ## Stack
@@ -15,7 +15,7 @@ The migration keeps the existing public URL contract:
 - AstroPaper
 - Tailwind CSS
 - Pagefind
-- Cloudflare Pages
+- Cloudflare Workers Static Assets
 - GitHub Actions
 
 ## Commands
@@ -26,6 +26,7 @@ Run commands from this directory.
 npm ci
 npm run dev
 npm run build
+npm run deploy
 npm run format:check
 npm run lint
 npm run verify:migration
@@ -37,13 +38,16 @@ npm run verify:links
 
 ## Deployment
 
-Cloudflare Pages settings:
+Cloudflare Workers Builds settings:
 
 - Build command: `npm run build`
-- Build output directory: `dist`
+- Deploy command: `npm run deploy`
 - Node.js: `26` (`.node-version`)
 
-The project includes `public/_redirects`; Cloudflare Pages should deploy it as `_redirects` in the generated site.
+Static assets are configured in `wrangler.jsonc` with `assets.directory` set to `./dist`.
+The deploy script runs `wrangler deploy --no-autoconfig` so Wrangler does not try to add the Astro Cloudflare adapter.
+
+The project includes `public/_redirects`; the Astro build copies it to `dist/_redirects` and Cloudflare Static Assets should apply those redirect rules.
 
 ## Quality Gates
 

@@ -9,6 +9,7 @@
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist && cp -r dist/pagefind public/",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "deploy": "wrangler deploy --no-autoconfig",
     "sync": "ASTRO_TELEMETRY_DISABLED=1 astro sync",
     "astro": "ASTRO_TELEMETRY_DISABLED=1 astro",
     "migrate:hugo": "node scripts/migrate-hugo-content.mjs",
@@ -50,6 +51,7 @@
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "^6.0.3",
-    "vite": "^7.3.6"
+    "vite": "^7.3.6",
+    "wrangler": "^4.107.0"
   }
 }

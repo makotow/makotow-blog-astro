@@ -13,7 +13,7 @@ This repository contains the Astro version of `blog.makotow.net`.
 
 - `src/content/posts/YYYY/MM/DD/<slug>.md`: migrated blog posts.
 - `src/content/pages/about.md`: About page content.
-- `public/_redirects`: Cloudflare Pages redirects generated from Hugo aliases.
+- `public/_redirects`: Cloudflare redirects generated from Hugo aliases.
 - `scripts/migrate-hugo-content.mjs`: converts Hugo posts into Astro content.
 - `scripts/verify-migration.mjs`: verifies canonical URLs, redirects, RSS, and sitemap.
 - `scripts/review-content.mjs`: prepares human review inventory for migrated posts.
@@ -43,7 +43,7 @@ Notes:
 
 - Do not change existing article URLs unless the user explicitly requests it.
 - Preserve case-sensitive and dotted slugs such as `Introduction-to-servicemesh-part1`, `19.07`, and `19.04.1`.
-- Preserve Hugo `aliases` as Cloudflare Pages 301 redirects.
+- Preserve Hugo `aliases` as Cloudflare 301 redirects.
 - Keep English posts mixed into the main archive; do not introduce `/en/` routing unless the user decides to.
 - Keep raw HTML embeds if they are part of the migrated content, but verify representative posts manually.
 - Use `ogImage` as both OGP metadata and article cover image when a post defines it.
@@ -60,8 +60,9 @@ Notes:
 
 ## Deployment Assumptions
 
-- Cloudflare Pages is the provisional hosting target.
+- Cloudflare Workers Static Assets is the provisional hosting target.
 - Use Node.js 26.x. The repository pins this with `.node-version`.
+- `wrangler.jsonc` defines the static asset deployment, with `assets.directory` set to `./dist`.
 - `_redirects` is part of the deployment contract and must be present in `dist/`.
 - RSS compatibility requires `/index.xml` to redirect to `/rss.xml`.
 - Sitemap generation must continue to work.
