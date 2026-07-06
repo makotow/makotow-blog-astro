@@ -2,7 +2,7 @@
 author: "makotow"
 pubDatetime: 2026-07-06T00:00:00+09:00
 title: "HugoからAstroへ: 移行のほぼ全てをAIエージェントにやらせた記録"
-draft: true
+draft: false
 tags:
   - "astro"
   - "hugo"
