@@ -28,6 +28,7 @@ public/pagefind
 
 # generated verification reports
 reports/
+.lighthouseci/
 
 # docker compose
 compose.override.yaml

@@ -32,9 +32,11 @@ npm run lint
 npm run verify:migration
 npm run review:content
 npm run verify:links
+npm run lhci
 ```
 
 `npm run build` type-checks the Astro project, builds the static site, indexes the generated HTML with Pagefind, and copies the Pagefind assets into `public/pagefind`.
+`npm run lhci` runs Lighthouse CI against the generated `dist` site and writes local reports to `reports/lighthouse`.
 
 ## Deployment
 
@@ -60,8 +62,10 @@ The GitHub Actions CI workflow runs:
 - `npm run verify:migration`
 - `npm run review:content`
 - `npm run verify:links`
+- `npm run lhci` in a separate non-blocking Lighthouse CI job
 
 The migration verification checks all 57 migrated Hugo posts, generated canonical files, and 108 redirect rules. Internal link verification checks generated HTML in `dist`.
+Lighthouse reports are uploaded as a GitHub Actions artifact; score assertions are warnings during the initial rollout.
 
 ## Content
 
