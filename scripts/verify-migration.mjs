@@ -165,6 +165,28 @@ function parseRedirects(filePath) {
   return redirects;
 }
 
+function expectedRedirectsFor(sourceInventory, posts, publicRedirects) {
+  if (sourceInventory === "astro") {
+    return new Map(publicRedirects);
+  }
+
+  const expectedRedirects = new Map([
+    ["/index.xml", { to: "/rss.xml", status: "301" }],
+  ]);
+  for (const post of posts) {
+    if (post.legacyPostPath !== post.canonicalPath) {
+      expectedRedirects.set(post.legacyPostPath, {
+        to: post.canonicalPath,
+        status: "301",
+      });
+    }
+    for (const alias of post.aliases) {
+      expectedRedirects.set(alias, { to: post.canonicalPath, status: "301" });
+    }
+  }
+  return expectedRedirects;
+}
+
 function distFileForPath(urlPath) {
   if (urlPath.endsWith("/")) {
     return path.join(distRoot, urlPath.slice(1), "index.html");
@@ -306,20 +328,11 @@ async function main() {
     }
   }
 
-  const expectedRedirects = new Map([
-    ["/index.xml", { to: "/rss.xml", status: "301" }],
-  ]);
-  for (const post of posts) {
-    if (post.legacyPostPath !== post.canonicalPath) {
-      expectedRedirects.set(post.legacyPostPath, {
-        to: post.canonicalPath,
-        status: "301",
-      });
-    }
-    for (const alias of post.aliases) {
-      expectedRedirects.set(alias, { to: post.canonicalPath, status: "301" });
-    }
-  }
+  const expectedRedirects = expectedRedirectsFor(
+    sourceInventory,
+    posts,
+    publicRedirects
+  );
 
   for (const [from, expected] of expectedRedirects) {
     const publicRule = publicRedirects.get(from);
