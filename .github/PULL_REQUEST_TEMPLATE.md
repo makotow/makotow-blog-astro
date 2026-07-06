@@ -10,6 +10,7 @@
 - [ ] `npm run verify:migration`
 - [ ] `npm run review:content`
 - [ ] `npm run verify:links`
+- [ ] `npm run lhci` if the change affects layout, assets, or client-side behavior
 
 ## URL Safety
 
