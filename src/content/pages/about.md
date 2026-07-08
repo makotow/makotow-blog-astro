@@ -1,23 +1,12 @@
 ---
 title: "About"
-description: "About this site and Makoto Watanabe."
+description: "規制業界のクラウド・AI導入を支援するアーキテクトのプロフィール。"
 ---
 
-## About this site
+金融機関をはじめとする規制業界のクラウド・AI導入を支援するアーキテクト。仕事の軸は2つ — ミッションクリティカルなシステムを支えるクラウド基盤の設計・本番運用と、生成AI・AIエージェントのエンタープライズ実装。どちらも現在進行形です。
 
-- Technical blog & poem.
-- Daily knowledge base.
-- Daily activities and learnings.
+いま最も関心があるのは、この2つが交わる場所です。企業がすでに運用している本番基盤に、AIエージェントをどう組み込むのか。エージェントを特別扱いせず、他の本番ワークロードと同じ規律 — 可観測性、セキュリティ境界、ライフサイクル管理 — に載せること。そして「検証できないものは本番に入れられない」規制業界で不可欠になる、エージェントの評価と品質保証。このブログでも今後の中心テーマとして書いていきます。
 
-## About me
+2013年から、インフラ技術の変化を実装者の視点で記録してきたアーカイブでもあります。
 
-- Kubernetes enthusiast
-- CSI watcher
-- Keyboard enthusiast
-- Cloud solutions architect / engineer
-
-## Links
-
-- X: [@makotow](https://x.com/makotow)
-- GitHub: [makotow](https://github.com/makotow)
-- Medium: [makotow](https://medium.com/@makotow)
+本ブログの内容はすべて個人の見解であり、所属組織の立場を代表するものではありません。
