@@ -51,6 +51,24 @@ The deploy script runs `wrangler deploy --no-autoconfig` so Wrangler does not tr
 
 The project includes `public/_redirects`; the Astro build copies it to `dist/_redirects` and Cloudflare Static Assets should apply those redirect rules.
 
+### Google Analytics 4
+
+Production builds enable Google Analytics when a GA4 measurement ID is provided:
+
+```text
+PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+Set this as a build-time environment variable in Cloudflare Workers Builds. The
+tag is omitted from development builds and from any build where the variable is
+unset, including pull-request previews unless the variable is made available to
+them.
+
+The site uses Astro's `ClientRouter`. Keep **Enhanced measurement > Page views >
+Page changes based on browser history events** enabled in the GA4 web data
+stream. Do not add a separate `astro:page-load` page-view event unless automatic
+history tracking is disabled, or page views will be counted twice.
+
 ## Quality Gates
 
 The GitHub Actions CI workflow runs:

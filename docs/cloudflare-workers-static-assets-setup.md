@@ -33,6 +33,13 @@ The deploy script runs `wrangler deploy --no-autoconfig` to prevent Wrangler fro
 5. Use the build and deploy commands above.
 6. Run the first deployment.
 
+For production analytics, add this build-time environment variable in the
+Workers Builds settings:
+
+- `PUBLIC_GA_MEASUREMENT_ID`: the GA4 web stream measurement ID (`G-XXXXXXXXXX`)
+
+Leave it unset for preview builds if preview traffic should not be collected.
+
 ## First Deployment Checks
 
 - `/` returns 200.
