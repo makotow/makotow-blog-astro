@@ -9,7 +9,7 @@ tags:
   - "rust"
 categories:
   - "wasm-getting-started"
-ogImage: "https://github.com/carlosbaraza/web-assembly-logo/blob/master/dist/logo/web-assembly-logo-512px.png?raw=true"
+ogImage: "https://raw.githubusercontent.com/carlosbaraza/web-assembly-logo/master/dist/logo/web-assembly-logo-512px.png"
 description: "WebAssembly と聞いて「あーあれね」から脱するが目的"
 timezone: "Asia/Tokyo"
 ---

@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from "astro:transitions";
 import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
@@ -11,6 +10,7 @@ type Props = {
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  lang?: "ja" | "en";
 };
 
 const { site } = config;
@@ -20,6 +20,7 @@ const {
   description = site.description,
   ogImage = resolveDefaultOgImagePath(config),
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  lang = Astro.currentLocale === "en" ? "en" : site.lang,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
@@ -29,7 +30,7 @@ const rssHref = getAssetPath("rss.xml");
 <!doctype html>
 <html
   dir={site.dir ?? "ltr"}
-  lang={Astro.currentLocale ?? site.lang}
+  lang={lang}
   class="overflow-y-scroll scroll-smooth"
 >
   <head>
@@ -104,8 +105,6 @@ const rssHref = getAssetPath("rss.xml");
         window.__theme = { value: theme };
       })();
     </script>
-
-    <ClientRouter />
   </head>
   <body
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"

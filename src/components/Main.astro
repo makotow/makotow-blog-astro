@@ -27,12 +27,10 @@ const backUrl = config.features.showBackButton
 </main>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    const mainContent: HTMLElement | null =
-      document.querySelector("#main-content");
-    const backUrl = mainContent?.dataset?.backurl;
-    if (backUrl) {
-      sessionStorage.setItem("backUrl", backUrl);
-    }
-  });
+  const mainContent: HTMLElement | null =
+    document.querySelector("#main-content");
+  const backUrl = mainContent?.dataset?.backurl;
+  if (backUrl) {
+    sessionStorage.setItem("backUrl", backUrl);
+  }
 </script>

@@ -26,22 +26,11 @@ interface PostsConfig {
   perPage?: number;
   /** Posts shown on the index/home page */
   perIndex?: number;
-  /**
-   * Scheduled posts within this window (ms) of their pubDatetime
-   * are shown as published. Defaults to 15 minutes.
-   */
-  scheduledPostMargin?: number;
 }
 
 interface FeaturesConfig {
   /** Enable light/dark mode toggle. Defaults to true. */
   lightAndDarkMode?: boolean;
-  /**
-   * Generate dynamic OG images per post and provide `/og.png` when the static
-   * `public/{site.ogImage}` file is absent. When false, that file is required
-   * for the default layout OG image (build fails if missing).
-   */
-  dynamicOgImage?: boolean;
   /** Show the /archives page and link it in nav. Defaults to true. */
   showArchives?: boolean;
   /** Show back button on post detail pages. Defaults to true. */

@@ -1,6 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import YAML from "yaml";
+import {
+  assertUniqueCanonicalPaths,
+  validatePostSource,
+} from "./lib/post-source-contract.mjs";
 
 const repoRoot = path.resolve(import.meta.dirname, "..");
 const hugoRoot = process.env.HUGO_ROOT
@@ -112,6 +116,30 @@ function canonicalPathForAstroPost(filePath) {
   const relativePath = path.relative(astroPostsRoot, filePath);
   const parsed = path.parse(relativePath);
   return `/${parsed.dir}/${parsed.name}/`;
+}
+
+function validateAstroPostSources() {
+  const posts = walk(astroPostsRoot, filePath => /\.(md|mdx)$/.test(filePath))
+    .sort()
+    .map(filePath => {
+      const source = fs.readFileSync(filePath, "utf8");
+      const { frontmatter, frontmatterSource } = splitFrontmatter(
+        source,
+        filePath
+      );
+      const relativePath = path.relative(astroPostsRoot, filePath);
+      const { canonicalPath } = validatePostSource({
+        relativePath,
+        pubDatetime:
+          getRawField(frontmatterSource, "pubDatetime") ??
+          frontmatter.pubDatetime,
+      });
+      return {
+        canonicalPath,
+        source: path.relative(repoRoot, filePath),
+      };
+    });
+  assertUniqueCanonicalPaths(posts);
 }
 
 function legacyPostPathFor(canonicalPath) {
@@ -292,6 +320,8 @@ async function main() {
   if (!fs.existsSync(publicRedirectsPath)) {
     throw new Error(`Missing redirects file: ${publicRedirectsPath}`);
   }
+
+  validateAstroPostSources();
 
   const { sourceInventory, posts } = expectedPosts();
   const publicRedirects = parseRedirects(publicRedirectsPath);

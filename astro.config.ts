@@ -16,6 +16,20 @@ import config from "./astro-paper.config";
 
 export default defineConfig({
   site: config.site.url,
+  // Astro 7 defaults to JSX whitespace semantics. Preserve the Astro 6 HTML
+  // behavior so Japanese/English inline boundaries and navigation labels do
+  // not collapse during this framework-only upgrade.
+  compressHTML: true,
+  image: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+        pathname:
+          "/carlosbaraza/web-assembly-logo/master/dist/logo/web-assembly-logo-512px.png",
+      },
+    ],
+  },
   integrations: [
     mdx(),
     sitemap({

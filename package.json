@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
-    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist && cp -r dist/pagefind public/",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "deploy": "wrangler deploy --no-autoconfig",
     "sync": "ASTRO_TELEMETRY_DISABLED=1 astro sync",
@@ -19,27 +19,29 @@
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "lhci": "lhci autorun"
+    "test": "node --test scripts/tests/*.test.mjs",
+    "lhci": "npm run lhci:desktop && npm run lhci:mobile",
+    "lhci:desktop": "lhci autorun --config=lighthouserc.cjs",
+    "lhci:mobile": "lhci autorun --config=lighthouserc.mobile.cjs"
   },
   "dependencies": {
-    "@astrojs/mdx": "^6.0.1",
-    "@astrojs/rss": "^4.0.18",
-    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/mdx": "^8.0.1",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.0",
-    "astro": "^6.4.2",
+    "astro": "^7.3.2",
     "dayjs": "^1.11.21",
     "lodash.kebabcase": "^4.1.1",
     "rehype-callouts": "^2.1.2",
     "remark-collapse": "^0.1.2",
     "remark-toc": "^9.0.0",
-    "satori": "^0.26.0",
     "sharp": "^0.34.5",
     "slugify": "^1.6.9",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@astrojs/markdown-remark": "^7.2.0",
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/markdown-remark": "^7.3.1",
     "@lhci/cli": "^0.15.1",
     "@pagefind/default-ui": "^1.5.2",
     "@shikijs/transformers": "^4.1.0",
@@ -53,7 +55,7 @@
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "^6.0.3",
-    "vite": "^7.3.6",
+    "vite": "^8.3.0",
     "wrangler": "^4.107.0"
   }
 }
