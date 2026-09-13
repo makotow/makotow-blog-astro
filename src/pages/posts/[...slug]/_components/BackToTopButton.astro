@@ -35,28 +35,37 @@ const t = useTranslations(Astro.currentLocale);
   </button>
 </div>
 
-<script is:inline data-astro-rerun>
+<script>
   function backToTop() {
     const rootElement = document.documentElement;
-    const btnContainer = document.querySelector("#btt-btn-container");
-    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
-    const progressIndicator = document.querySelector("#progress-indicator");
+    const btnContainer =
+      document.querySelector<HTMLElement>("#btt-btn-container");
+    const backToTopBtn = document.querySelector<HTMLButtonElement>(
+      "[data-button='back-to-top']"
+    );
+    const progressIndicator = document.querySelector<HTMLElement>(
+      "#progress-indicator"
+    );
 
     if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
       return;
 
-    backToTopBtn.addEventListener("click", () => {
+    const container = btnContainer;
+    const button = backToTopBtn;
+    const indicator = progressIndicator;
+
+    button.addEventListener("click", () => {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
     });
 
-    let lastVisible = null;
+    let lastVisible: boolean | null = null;
     function handleScroll() {
       const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
       const scrollTop = rootElement.scrollTop;
       const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
 
-      progressIndicator.style.setProperty(
+      indicator.style.setProperty(
         "background-image",
         `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
       );
@@ -64,10 +73,10 @@ const t = useTranslations(Astro.currentLocale);
       const isVisible = scrollTop / scrollTotal > 0.3;
 
       if (isVisible !== lastVisible) {
-        btnContainer.classList.toggle("opacity-100", isVisible);
-        btnContainer.classList.toggle("translate-y-0", isVisible);
-        btnContainer.classList.toggle("opacity-0", !isVisible);
-        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        container.classList.toggle("opacity-100", isVisible);
+        container.classList.toggle("translate-y-0", isVisible);
+        container.classList.toggle("opacity-0", !isVisible);
+        container.classList.toggle("translate-y-14", !isVisible);
         lastVisible = isVisible;
       }
     }

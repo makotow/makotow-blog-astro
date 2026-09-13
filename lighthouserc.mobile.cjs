@@ -1,6 +1,5 @@
 const { createLighthouseConfig } = require("./lighthouse-config.cjs");
 
 module.exports = createLighthouseConfig({
-  preset: "desktop",
-  outputDir: "./reports/lighthouse/desktop",
+  outputDir: "./reports/lighthouse/mobile",
 });

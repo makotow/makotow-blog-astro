@@ -16,13 +16,18 @@ if (!about) {
 }
 
 const { Content } = await render(about);
+const ogImage =
+  typeof about.data.ogImage === "string"
+    ? about.data.ogImage
+    : about.data.ogImage?.src;
 ---
 
 <Layout
   title={`${about.data.title} | ${config.site.title}`}
   description={about.data.description}
-  ogImage={about.data.ogImage}
+  {ogImage}
   canonicalURL={about.data.canonicalURL}
+  lang={about.data.lang}
 >
   <Header />
 

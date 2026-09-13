@@ -11,19 +11,13 @@ if (measurementId && !/^G-[A-Z0-9]+$/.test(measurementId)) {
 
 const enabled = import.meta.env.PROD && Boolean(measurementId);
 const initializationScript = `
-  // Inline scripts can run again after an Astro client-side navigation.
-  // Configure the Google tag only once and let GA4 Enhanced Measurement
-  // observe History API changes for subsequent page views.
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function () {
     window.dataLayer.push(arguments);
   };
 
-  if (!window.__ga4Initialized) {
-    window.__ga4Initialized = true;
-    window.gtag("js", new Date());
-    window.gtag("config", ${JSON.stringify(measurementId)});
-  }
+  window.gtag("js", new Date());
+  window.gtag("config", ${JSON.stringify(measurementId)});
 `;
 ---
 

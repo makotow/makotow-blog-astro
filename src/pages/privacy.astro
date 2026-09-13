@@ -16,12 +16,18 @@ if (!privacy) {
 }
 
 const { Content } = await render(privacy);
+const ogImage =
+  typeof privacy.data.ogImage === "string"
+    ? privacy.data.ogImage
+    : privacy.data.ogImage?.src;
 ---
 
 <Layout
   title={`${privacy.data.title} | ${config.site.title}`}
   description={privacy.data.description}
+  {ogImage}
   canonicalURL={privacy.data.canonicalURL}
+  lang={privacy.data.lang}
 >
   <Header />
   <Breadcrumb />
