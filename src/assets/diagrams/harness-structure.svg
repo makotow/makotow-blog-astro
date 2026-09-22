@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="442" viewBox="0 0 680 442" role="img" aria-labelledby="title">
+<title id="title">モデルの出力をHarnessで実行・検証する</title>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#64748b"/></marker></defs>
+<rect width="680" height="442" rx="16" fill="#f8fafc"/>
+<g font-family="system-ui, sans-serif" text-anchor="middle">
+<text x="340" y="34" font-size="18" font-weight="700" fill="#0f172a">モデルの出力をHarnessで実行・検証する</text>
+
+<rect x="30" y="56" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="83" font-size="18" font-weight="600" fill="#0f172a">Model</text>
+<text x="340" y="106" font-size="15" fill="#334155">判断・Tool呼び出しを生成</text>
+<path d="M340 124V142" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="148" width="620" height="66" rx="8" fill="#dbeafe" stroke="#94a3b8"/>
+<text x="340" y="175" font-size="18" font-weight="600" fill="#0f172a">Harness</text>
+<text x="340" y="198" font-size="15" fill="#334155">Prompt / Context / Tools / Permissions</text>
+<path d="M340 216V234" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="240" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="267" font-size="18" font-weight="600" fill="#0f172a">Execution &amp; Validation</text>
+<text x="340" y="290" font-size="15" fill="#334155">実行・再試行・状態管理・検証・人間の承認</text>
+<path d="M340 308V326" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="332" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="359" font-size="18" font-weight="600" fill="#0f172a">Agent Behavior → Outcome</text>
+<text x="340" y="382" font-size="15" fill="#334155">実際の行動と、その結果を評価する</text>
+</g></svg>
