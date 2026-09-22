@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="442" viewBox="0 0 680 442" role="img" aria-labelledby="title">
+<title id="title">結果から原因をたどる</title>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#64748b"/></marker></defs>
+<rect width="680" height="442" rx="16" fill="#f8fafc"/>
+<g font-family="system-ui, sans-serif" text-anchor="middle">
+<text x="340" y="34" font-size="18" font-weight="700" fill="#0f172a">結果から原因をたどる</text>
+
+<rect x="30" y="56" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="83" font-size="18" font-weight="600" fill="#0f172a">Tool Selection</text>
+<text x="340" y="106" font-size="15" fill="#334155">Toolの選択</text>
+<path d="M340 124V142" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="148" width="620" height="66" rx="8" fill="#dbeafe" stroke="#94a3b8"/>
+<text x="340" y="175" font-size="18" font-weight="600" fill="#0f172a">Parameter Generation</text>
+<text x="340" y="198" font-size="15" fill="#334155">Root Cause：パラメータ生成で最初に失敗</text>
+<path d="M340 216V234" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="240" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="267" font-size="18" font-weight="600" fill="#0f172a">Tool Result</text>
+<text x="340" y="290" font-size="15" fill="#334155">不適切な入力による結果</text>
+<path d="M340 308V326" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="332" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="359" font-size="18" font-weight="600" fill="#0f172a">Analysis → Final Answer</text>
+<text x="340" y="382" font-size="15" fill="#334155">Cascade：分析と最終回答へ波及</text>
+</g></svg>

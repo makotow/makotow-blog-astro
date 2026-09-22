@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="534" viewBox="0 0 680 534" role="img" aria-labelledby="title">
+<title id="title">旅行Agent：1つの誤りが後続Turnへ伝播する</title>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#64748b"/></marker></defs>
+<rect width="680" height="534" rx="16" fill="#f8fafc"/>
+<g font-family="system-ui, sans-serif" text-anchor="middle">
+<text x="340" y="34" font-size="18" font-weight="700" fill="#0f172a">旅行Agent：1つの誤りが後続Turnへ伝播する</text>
+
+<rect x="30" y="56" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="83" font-size="18" font-weight="600" fill="#0f172a">Turn 1 · 目的地を確認</text>
+<text x="340" y="106" font-size="15" fill="#334155">OK</text>
+<path d="M340 124V142" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="148" width="620" height="66" rx="8" fill="#dbeafe" stroke="#94a3b8"/>
+<text x="340" y="175" font-size="18" font-weight="600" fill="#0f172a">Turn 2 · 日付をToolへ渡す</text>
+<text x="340" y="198" font-size="15" fill="#334155">Root Cause：日付パラメータの誤り</text>
+<path d="M340 216V234" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="240" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="267" font-size="18" font-weight="600" fill="#0f172a">Turn 3 · ホテルを検索</text>
+<text x="340" y="290" font-size="15" fill="#334155">Cascade：誤った日付で検索</text>
+<path d="M340 308V326" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="332" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="359" font-size="18" font-weight="600" fill="#0f172a">Turn 4 · 旅程を作成</text>
+<text x="340" y="382" font-size="15" fill="#334155">Cascade：検索結果の誤りを引き継ぐ</text>
+<path d="M340 400V418" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="424" width="620" height="66" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+<text x="340" y="451" font-size="18" font-weight="600" fill="#0f172a">Turn 5 · ユーザーへ回答</text>
+<text x="340" y="474" font-size="15" fill="#334155">Cascade：誤った旅程を回答</text>
+</g></svg>
