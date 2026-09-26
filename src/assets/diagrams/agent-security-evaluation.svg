@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="600" viewBox="0 0 760 600" role="img" aria-labelledby="title desc">
+  <title id="title">Agentの判断と防御境界を別々に評価する</title>
+  <desc id="desc">モデルを含む攻撃下のタスク評価と、モデルを介さない境界への直接テストを実施する。両方の結果、正常系、判定に必要な観測を確認してリリースを判断する。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#475569"/></marker>
+  </defs>
+  <rect width="760" height="600" rx="16" fill="#f8fafc"/>
+  <g font-family="system-ui, sans-serif" text-anchor="middle" fill="#0f172a">
+    <text x="380" y="38" font-size="22" font-weight="700">Agentの判断と、防御の強制力を分ける</text>
+    <rect x="24" y="62" width="344" height="128" rx="12" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="196" y="92" font-size="19" font-weight="700">モデルを含む評価</text>
+    <text x="196" y="123" font-size="17">正当なタスク ＋ 未信頼の入力</text>
+    <text x="196" y="151" font-size="17">Agentはどの操作を要求したか？</text>
+    <text x="196" y="176" font-size="15" fill="#334155">仕事の達成と攻撃の成否を測る</text>
+    <rect x="392" y="62" width="344" height="128" rx="12" fill="#fef3c7" stroke="#b45309"/>
+    <text x="564" y="92" font-size="19" font-weight="700">境界への直接テスト</text>
+    <text x="564" y="123" font-size="17">モデルを介さず禁止操作を実行</text>
+    <text x="564" y="151" font-size="17">誤った操作を強制的に止めるか？</text>
+    <text x="564" y="176" font-size="15" fill="#334155">認可・通信・状態の変化を測る</text>
+    <path d="M196 192V221M564 192V221" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="24" y="232" width="712" height="174" rx="12" fill="#fff" stroke="#64748b" stroke-width="2"/>
+    <text x="380" y="261" font-size="19" font-weight="700">実行基盤とツール仲介が強制する境界</text>
+    <rect x="44" y="280" width="212" height="72" rx="8" fill="#e2e8f0"/>
+    <text x="150" y="309" font-size="18" font-weight="600">実行隔離</text>
+    <text x="150" y="334" font-size="15">ホスト・セッション</text>
+    <rect x="274" y="280" width="212" height="72" rx="8" fill="#e2e8f0"/>
+    <text x="380" y="309" font-size="18" font-weight="600">ジョブ単位の認可</text>
+    <text x="380" y="334" font-size="15">テナント・対象・操作</text>
+    <rect x="504" y="280" width="212" height="72" rx="8" fill="#e2e8f0"/>
+    <text x="610" y="309" font-size="18" font-weight="600">データの出口</text>
+    <text x="610" y="334" font-size="15">通信・成果物・配信</text>
+    <text x="380" y="384" font-size="17">認可結果 ＋ 実際の副作用 ＋ 正常系の証拠</text>
+    <path d="M380 408V437" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="24" y="448" width="712" height="124" rx="12" fill="#dcfce7" stroke="#15803d"/>
+    <text x="380" y="481" font-size="19" font-weight="700">リリース判定</text>
+    <text x="380" y="514" font-size="17">必須の境界違反なし ／ 正常系が成功 ／ 評価基準を充足</text>
+    <text x="380" y="547" font-size="16">観測できない結果は「安全」に数えず、判定不能として止める</text>
+  </g>
+</svg>
