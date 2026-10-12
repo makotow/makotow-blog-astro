@@ -104,7 +104,7 @@ const localCoverImage =
 
   <main
     id="main-content"
-    class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
+    class:list={["post-layout", { "mt-8": !config.features.showBackButton }]}
     data-pagefind-body
   >
     <h1 class="text-accent inline-block text-2xl font-bold sm:text-3xl">
@@ -137,7 +137,7 @@ const localCoverImage =
               alt={title}
               inferSize
               widths={[720, 960, 1200]}
-              sizes="(min-width: 768px) 768px, 100vw"
+              sizes="(min-width: 896px) 864px, calc(100vw - 32px)"
               class="h-auto w-full object-contain"
               priority
             />
@@ -147,7 +147,7 @@ const localCoverImage =
               src={localCoverImage}
               alt={title}
               widths={[720, 960, 1200]}
-              sizes="(min-width: 768px) 768px, 100vw"
+              sizes="(min-width: 896px) 864px, calc(100vw - 32px)"
               class="h-auto w-full object-contain"
               priority
             />
@@ -160,7 +160,7 @@ const localCoverImage =
       id="article"
       class:list={[
         "mt-8 w-full",
-        "app-prose max-w-app",
+        "app-prose max-w-post",
         "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
       ]}
     >
