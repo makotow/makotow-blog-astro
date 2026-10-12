@@ -29,6 +29,14 @@
   @apply max-w-app mx-auto w-full px-4;
 }
 
+@utility max-w-post {
+  @apply max-w-4xl;
+}
+
+@utility post-layout {
+  @apply max-w-post mx-auto w-full px-4;
+}
+
 @utility active-nav {
   @apply underline decoration-wavy decoration-2 underline-offset-8;
 }
