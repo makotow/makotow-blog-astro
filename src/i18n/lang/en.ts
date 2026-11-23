@@ -63,6 +63,8 @@ export default {
     noResults: "No results found",
     goToPreviousPage: "Go to previous page",
     goToNextPage: "Go to next page",
+    enlargeImage: "Enlarge image",
+    closeImage: "Close enlarged image",
   },
   notFound: {
     title: "404 Not Found",

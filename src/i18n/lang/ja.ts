@@ -63,6 +63,8 @@ export default {
     noResults: "検索結果がありません",
     goToPreviousPage: "前のページへ移動",
     goToNextPage: "次のページへ移動",
+    enlargeImage: "画像を拡大表示",
+    closeImage: "拡大表示を閉じる",
   },
   notFound: {
     title: "404 ページが見つかりません",
