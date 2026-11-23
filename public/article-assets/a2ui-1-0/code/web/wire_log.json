@@ -1,0 +1,287 @@
+[
+  {
+    "dir": "agent→renderer",
+    "m": {
+      "version": "1.0",
+      "createSurface": {
+        "surfaceId": "seat",
+        "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json",
+        "sendDataModel": true,
+        "metadata": {
+          "extensions": {
+            "demoTrace": {
+              "turn": 1
+            }
+          }
+        },
+        "dataModel": {
+          "flight": "NH 105",
+          "seat": ""
+        },
+        "components": [
+          {
+            "id": "root",
+            "component": "Card",
+            "child": "col"
+          },
+          {
+            "id": "col",
+            "component": "Column",
+            "children": ["title", "seatField", "status", "book"]
+          },
+          {
+            "id": "title",
+            "component": "Text",
+            "text": {
+              "@call": "formatString",
+              "args": {
+                "value": "${/flight} の座席指定"
+              }
+            }
+          },
+          {
+            "id": "seatField",
+            "component": "TextField",
+            "label": "座席番号",
+            "value": {
+              "@path": "/seat"
+            },
+            "@checks": [
+              {
+                "condition": {
+                  "@call": "required",
+                  "args": {
+                    "value": {
+                      "@path": "/seat"
+                    }
+                  }
+                },
+                "message": "座席番号を入力してください"
+              },
+              {
+                "condition": {
+                  "@call": "checkSeat",
+                  "catalogId": "https://example.com/a2ui/travel/v1/catalog.json",
+                  "args": {
+                    "flight": {
+                      "@path": "/flight"
+                    },
+                    "seat": {
+                      "@path": "/seat"
+                    }
+                  }
+                },
+                "message": "その座席は埋まっています"
+              }
+            ]
+          },
+          {
+            "id": "status",
+            "component": "Text",
+            "variant": "caption",
+            "text": {
+              "@call": "formatString",
+              "args": {
+                "value": "選択中: ${/seat}"
+              }
+            },
+            "@accessibility": {
+              "live": "polite"
+            }
+          },
+          {
+            "id": "bookLabel",
+            "component": "Text",
+            "text": "予約"
+          },
+          {
+            "id": "book",
+            "component": "Button",
+            "variant": "primary",
+            "child": "bookLabel",
+            "@accessibility": {
+              "label": "選択した座席で予約を確定",
+              "description": "確定後の変更は手数料がかかります"
+            },
+            "@metadata": {
+              "extensions": {
+                "demoAnalytics": {
+                  "cta": "book"
+                }
+              }
+            },
+            "action": {
+              "event": {
+                "name": "book",
+                "context": {
+                  "flight": {
+                    "@path": "/flight"
+                  },
+                  "seat": {
+                    "@path": "/seat"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "dir": "renderer→agent",
+    "m": {
+      "version": "1.0",
+      "callAgentFunction": {
+        "surfaceId": "seat",
+        "functionCallId": "1616f25b-2a89-48a9-b9ea-3a35f764ce3a",
+        "callFunction": {
+          "@call": "checkSeat",
+          "catalogId": "https://example.com/a2ui/travel/v1/catalog.json",
+          "args": {
+            "flight": "NH 105",
+            "seat": ""
+          }
+        }
+      }
+    }
+  },
+  {
+    "dir": "agent→renderer",
+    "m": {
+      "version": "1.0",
+      "agentFunctionResponse": {
+        "functionCallId": "1616f25b-2a89-48a9-b9ea-3a35f764ce3a",
+        "value": true
+      }
+    }
+  },
+  {
+    "dir": "renderer→agent",
+    "m": {
+      "version": "1.0",
+      "callAgentFunction": {
+        "surfaceId": "seat",
+        "functionCallId": "0d27c726-cc4e-4a5b-8d8a-24b7ffac5d8b",
+        "callFunction": {
+          "@call": "checkSeat",
+          "catalogId": "https://example.com/a2ui/travel/v1/catalog.json",
+          "args": {
+            "flight": "NH 105",
+            "seat": "12A"
+          }
+        }
+      }
+    }
+  },
+  {
+    "dir": "agent→renderer",
+    "m": {
+      "version": "1.0",
+      "agentFunctionResponse": {
+        "functionCallId": "0d27c726-cc4e-4a5b-8d8a-24b7ffac5d8b",
+        "value": false
+      }
+    }
+  },
+  {
+    "dir": "renderer→agent",
+    "m": {
+      "version": "1.0",
+      "callAgentFunction": {
+        "surfaceId": "seat",
+        "functionCallId": "9942f51f-6c85-4a60-8c27-93cb28b96e9a",
+        "callFunction": {
+          "@call": "checkSeat",
+          "catalogId": "https://example.com/a2ui/travel/v1/catalog.json",
+          "args": {
+            "flight": "NH 105",
+            "seat": "14C"
+          }
+        }
+      }
+    }
+  },
+  {
+    "dir": "agent→renderer",
+    "m": {
+      "version": "1.0",
+      "agentFunctionResponse": {
+        "functionCallId": "9942f51f-6c85-4a60-8c27-93cb28b96e9a",
+        "value": true
+      }
+    }
+  },
+  {
+    "dir": "agent→renderer",
+    "m": {
+      "version": "1.0",
+      "callRendererFunction": {
+        "functionCallId": "a311530c-101c-49a0-92af-c1e085bd02ca",
+        "callFunction": {
+          "@call": "getViewport",
+          "catalogId": "https://example.com/a2ui/travel/v1/catalog.json",
+          "args": {}
+        }
+      }
+    }
+  },
+  {
+    "dir": "renderer→agent",
+    "m": {
+      "version": "1.0",
+      "rendererFunctionResponse": {
+        "functionCallId": "a311530c-101c-49a0-92af-c1e085bd02ca",
+        "value": {
+          "width": 1280,
+          "height": 820
+        }
+      }
+    }
+  },
+  {
+    "dir": "agent→renderer",
+    "m": {
+      "version": "1.0",
+      "callRendererFunction": {
+        "functionCallId": "raw-openurl-1",
+        "callFunction": {
+          "@call": "openUrl",
+          "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json",
+          "args": {
+            "url": "https://a2ui.org"
+          }
+        }
+      }
+    }
+  },
+  {
+    "dir": "renderer→agent",
+    "m": {
+      "version": "1.0",
+      "rendererFunctionResponse": {
+        "functionCallId": "raw-openurl-1",
+        "error": {
+          "code": "INVALID_FUNCTION_CALL",
+          "message": "Function 'openUrl' cannot be called by agent (allowedCallers is rendererOnly)."
+        }
+      }
+    }
+  },
+  {
+    "dir": "renderer→agent",
+    "m": {
+      "version": "1.0",
+      "action": {
+        "name": "book",
+        "surfaceId": "seat",
+        "sourceComponentId": "book",
+        "timestamp": "2026-11-15T06:08:44.558Z",
+        "context": {
+          "flight": "NH 105",
+          "seat": "14C"
+        }
+      }
+    }
+  }
+]
