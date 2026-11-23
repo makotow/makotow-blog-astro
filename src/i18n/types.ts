@@ -61,6 +61,8 @@ export interface UIStrings {
     noResults: string;
     goToPreviousPage: string;
     goToNextPage: string;
+    enlargeImage: string;
+    closeImage: string;
   };
   notFound: {
     title: string;

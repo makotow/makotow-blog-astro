@@ -14,6 +14,7 @@ import ShareLinks from "./posts/[...slug]/_components/ShareLinks.astro";
 import BackButton from "./posts/[...slug]/_components/BackButton.astro";
 import BackToTopButton from "./posts/[...slug]/_components/BackToTopButton.astro";
 import AdjacentPostNav from "./posts/[...slug]/_components/AdjacentPostNav.astro";
+import ImageZoom from "./posts/[...slug]/_components/ImageZoom.astro";
 import config from "@/config";
 
 export async function getStaticPaths() {
@@ -172,6 +173,8 @@ const localCoverImage =
     <EditPost class="sm:hidden" {hideEditPost} {post} />
 
     <BackToTopButton />
+
+    <ImageZoom />
 
     <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
       {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}

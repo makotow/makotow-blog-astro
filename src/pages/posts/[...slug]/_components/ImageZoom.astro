@@ -1,0 +1,145 @@
+---
+import { useTranslations } from "@/i18n";
+
+const t = useTranslations(Astro.currentLocale);
+---
+
+<dialog
+  id="image-zoom"
+  class="image-zoom"
+  aria-label={t.a11y.enlargeImage}
+  data-enlarge-label={t.a11y.enlargeImage}
+>
+  <button type="button" class="image-zoom-close" data-image-zoom-close>
+    <span aria-hidden="true">×</span>
+    <span class="sr-only">{t.a11y.closeImage}</span>
+  </button>
+  <div class="image-zoom-body" data-image-zoom-body>
+    <img alt="" decoding="async" data-image-zoom-img />
+  </div>
+</dialog>
+
+<style is:global>
+  @reference "../../../../styles/global.css";
+
+  html:has(.image-zoom[open]) {
+    overflow: hidden;
+  }
+
+  main figure img[role="button"] {
+    cursor: zoom-in;
+  }
+
+  .image-zoom {
+    @apply m-0 h-dvh max-h-none w-screen max-w-none border-0 bg-transparent p-0;
+
+    &::backdrop {
+      background: rgb(0 0 0 / 0.88);
+    }
+  }
+
+  .image-zoom-body {
+    @apply flex h-full w-full overflow-auto overscroll-contain p-4;
+  }
+
+  .image-zoom-body img {
+    /* Center when the image fits; allow panning when it does not. */
+    @apply m-auto h-auto max-w-none bg-white;
+    /* Mobile: show diagrams about twice the screen width so labels are
+       readable, but never upscale past the source resolution. */
+    width: min(var(--zoom-natural-width, 100%), 200vw);
+  }
+
+  @media (min-width: 768px) {
+    .image-zoom-body img {
+      width: auto;
+      max-width: 100%;
+      max-height: calc(100dvh - 2rem);
+    }
+  }
+
+  .image-zoom-close {
+    @apply fixed top-3 right-3 z-10 flex size-11 items-center justify-center rounded-full text-3xl leading-none text-white;
+    background: rgb(0 0 0 / 0.55);
+  }
+</style>
+
+<script>
+  function setupImageZoom() {
+    const dialog = document.querySelector<HTMLDialogElement>("#image-zoom");
+    const zoomImg = dialog?.querySelector<HTMLImageElement>(
+      "[data-image-zoom-img]"
+    );
+    const body = dialog?.querySelector<HTMLElement>("[data-image-zoom-body]");
+    const closeBtn = dialog?.querySelector<HTMLButtonElement>(
+      "[data-image-zoom-close]"
+    );
+    if (!dialog || !zoomImg || !body || !closeBtn) return;
+
+    const enlargeLabel = dialog.dataset.enlargeLabel ?? "";
+    let lastTrigger: HTMLImageElement | null = null;
+
+    function largestSource(img: HTMLImageElement) {
+      const candidates = (img.getAttribute("srcset") ?? "")
+        .split(",")
+        .map(entry => entry.trim().split(/\s+/))
+        .filter(([url]) => url)
+        .map(([url, descriptor = "1w"]) => ({
+          url,
+          size: parseFloat(descriptor) || 1,
+        }));
+      if (candidates.length === 0) return img.currentSrc || img.src;
+      return candidates.sort((a, b) => b.size - a.size)[0].url;
+    }
+
+    function open(img: HTMLImageElement) {
+      lastTrigger = img;
+      zoomImg!.alt = img.alt;
+      zoomImg!.src = largestSource(img);
+      const naturalWidth = img.naturalWidth;
+      if (naturalWidth > 0) {
+        zoomImg!.style.setProperty("--zoom-natural-width", `${naturalWidth}px`);
+      } else {
+        zoomImg!.style.removeProperty("--zoom-natural-width");
+      }
+      dialog!.showModal();
+      body!.scrollTo(0, 0);
+    }
+
+    function close() {
+      if (dialog!.open) dialog!.close();
+    }
+
+    dialog.addEventListener("close", () => {
+      zoomImg.removeAttribute("src");
+      lastTrigger?.focus();
+    });
+    closeBtn.addEventListener("click", close);
+    // Tapping outside the image closes; tapping the image keeps it open so
+    // the reader can pan around.
+    dialog.addEventListener("click", event => {
+      if (event.target !== zoomImg) close();
+    });
+
+    const images = document.querySelectorAll<HTMLImageElement>(
+      "main figure img, #article img"
+    );
+    for (const img of images) {
+      // Images that already link somewhere keep their link behavior.
+      if (img.closest("a")) continue;
+      img.setAttribute("role", "button");
+      img.setAttribute("tabindex", "0");
+      img.setAttribute("aria-haspopup", "dialog");
+      img.title = enlargeLabel;
+      img.addEventListener("click", () => open(img));
+      img.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          open(img);
+        }
+      });
+    }
+  }
+
+  setupImageZoom();
+</script>

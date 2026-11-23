@@ -77,10 +77,23 @@
       @apply opacity-75;
     }
 
+    /* Wide tables scroll inside this wrapper (see rehypeTableScroll). */
+    .table-scroll {
+      @apply my-6 max-w-full overflow-x-auto focus-visible:outline-2 focus-visible:outline-dashed;
+
+      > table {
+        @apply my-0;
+      }
+    }
+
     table {
       th,
       td {
         @apply border-border border p-2;
+        /* `overflow-wrap: anywhere` lets Japanese cells collapse to 1–2
+           characters per line on mobile. Keep a readable minimum width and
+           let the wrapper scroll horizontally instead. */
+        min-width: 7em;
       }
 
       th {
