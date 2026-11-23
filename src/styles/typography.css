@@ -80,6 +80,7 @@
     /* Wide tables scroll inside this wrapper (see rehypeTableScroll). */
     .table-scroll {
       @apply my-6 max-w-full overflow-x-auto focus-visible:outline-2 focus-visible:outline-dashed;
+      -webkit-overflow-scrolling: touch;
 
       > table {
         @apply my-0;
@@ -87,9 +88,12 @@
     }
 
     table {
+      overflow-wrap: break-word;
+      word-break: normal;
+
       th,
       td {
-        @apply border-border border p-2;
+        @apply border-border border p-2 align-top;
         /* `overflow-wrap: anywhere` lets Japanese cells collapse to 1–2
            characters per line on mobile. Keep a readable minimum width and
            let the wrapper scroll horizontally instead. */
@@ -97,7 +101,20 @@
       }
 
       th {
-        @apply py-1.5;
+        @apply py-1.5 whitespace-nowrap;
+      }
+
+      &:has(th:nth-child(4)) {
+        th:first-child,
+        td:first-child {
+          min-width: 4rem;
+          white-space: nowrap;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+          min-width: 9.5rem;
+        }
       }
     }
 
