@@ -1,0 +1,107 @@
+// A2UI 1.0 ハンズオン: React レンダラー ⇄ (ブラウザ内) モックエージェント
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { A2uiSurface } from '@a2ui/react';
+import { MessageProcessor, basicCatalog, Catalog, createFunctionImplementation } from '@a2ui/web_core/v1_0';
+import { AgentFunction, Catalog as AgentCatalog, RendererToAgentMessageProcessor, RendererFunctionCalls, validatePayload } from '@a2ui/agent';
+import { z } from 'zod';
+import travelDoc from './travel_catalog.json';
+import basicDoc from '/home/claude/a2ui-src/catalogs/basic/v1/catalog.json';
+
+const TRAVEL = travelDoc.catalogId;
+const BASIC = basicCatalog.id;
+const wire: any[] = [];
+(window as any).wire = wire;
+const logWire = (dir: string, m: any) => { wire.push({ dir, m }); render(); };
+
+// ---------- エージェント側（@a2ui/agent） ----------
+const TAKEN = new Set(['12A', '12B']);
+const travelDecl: any = AgentCatalog.fromJson(travelDoc);
+const agentTravel = travelDecl.copyWith({
+  agentFunctions: [AgentFunction.fromApi(travelDecl.functions.get('checkSeat'),
+    async (args: any) => { await new Promise(r => setTimeout(r, 150)); return !TAKEN.has(String(args.seat).toUpperCase()); })],
+});
+const agentBasic = AgentCatalog.fromJson(basicDoc as any);
+const calls = new RendererFunctionCalls({ defaultTimeoutMs: 5000, catalogs: [agentBasic, agentTravel] } as any);
+const agentInbox = new RendererToAgentMessageProcessor({
+  catalogs: [agentBasic, agentTravel],
+  onRendererFunctionResponse: calls.resolve,
+  onAction: (m: any) => { (window as any).lastAction = m; return true; },
+  onError: (m: any) => { (window as any).lastError = m; return true; },
+} as any);
+async function agentReceive(m: any) {
+  const { replies } = await agentInbox.processMessage(m);
+  for (const r of replies) toRenderer(r);
+}
+function toRenderer(m: any) {
+  wire.push({ dir: 'agent→renderer', m });
+  try { renderer.processMessages(m); } catch (e: any) { console.error('processMessages failed', e.message); }
+  render();
+}
+
+// ---------- レンダラー側（@a2ui/web_core + @a2ui/react） ----------
+const getViewport = createFunctionImplementation(
+  { name: 'getViewport', returnType: 'object', schema: z.object({}), allowedCallers: 'rendererOrAgent' } as any,
+  () => ({ width: window.innerWidth, height: window.innerHeight }));
+const rendererTravel = Catalog.fromJson(travelDoc).copyWith({ functions: [getViewport] } as any) as any;
+const renderer: any = new MessageProcessor([basicCatalog, rendererTravel] as any, undefined, {
+  outboundListener: (m: any) => { logWire('renderer→agent', m); agentReceive(m); },
+  errorHandler: (m: any) => { logWire('renderer→agent', m); agentReceive(m); },
+  unifiedOutbound: true,
+} as any);
+(window as any).renderer = renderer;
+
+// ---------- シナリオ ----------
+const createMsg = {
+  version: '1.0',
+  createSurface: {
+    surfaceId: 'seat',
+    catalogId: BASIC,
+    sendDataModel: true,
+    metadata: { extensions: { demoTrace: { turn: 1 } } },
+    dataModel: { flight: 'NH 105', seat: '' },
+    components: [
+      { id: 'root', component: 'Card', child: 'col' },
+      { id: 'col', component: 'Column', children: ['title', 'seatField', 'status', 'book'] },
+      { id: 'title', component: 'Text', text: { '@call': 'formatString', args: { value: '${/flight} の座席指定' } } },
+      { id: 'seatField', component: 'TextField', label: '座席番号', value: { '@path': '/seat' },
+        '@checks': [
+          { condition: { '@call': 'required', args: { value: { '@path': '/seat' } } }, message: '座席番号を入力してください' },
+          { condition: { '@call': 'checkSeat', catalogId: TRAVEL, args: { flight: { '@path': '/flight' }, seat: { '@path': '/seat' } } }, message: 'その座席は埋まっています' },
+        ] },
+      { id: 'status', component: 'Text', variant: 'caption',
+        text: { '@call': 'formatString', args: { value: '選択中: ${/seat}' } },
+        '@accessibility': { live: 'polite' } },
+      { id: 'bookLabel', component: 'Text', text: '予約' },
+      { id: 'book', component: 'Button', variant: 'primary', child: 'bookLabel',
+        '@accessibility': { label: '選択した座席で予約を確定', description: '確定後の変更は手数料がかかります' },
+        '@metadata': { extensions: { demoAnalytics: { cta: 'book' } } },
+        action: { event: { name: 'book', context: { flight: { '@path': '/flight' }, seat: { '@path': '/seat' } } } } },
+    ],
+  },
+};
+// エージェントは送信前に SDK で検証できる
+try { validatePayload([agentBasic, agentTravel] as any, [createMsg] as any); (window as any).validated = 'ok'; }
+catch (e: any) { (window as any).validated = 'NG: ' + e.message; }
+
+(window as any).scenario = {
+  start: () => toRenderer(createMsg),
+  viewport: async () => { const [msg, p] = calls.call({ catalogId: TRAVEL, name: 'getViewport', args: {} } as any); toRenderer(msg); return await p; },
+  agentOpenUrlViaSdk: () => { try { calls.call({ catalogId: BASIC, name: 'openUrl', args: { url: 'https://a2ui.org' } } as any); return 'sent'; } catch (e: any) { return `${e.code}: ${e.message}`; } },
+  agentOpenUrlRaw: () => toRenderer({ version: '1.0', callRendererFunction: { functionCallId: 'raw-openurl-1', callFunction: { '@call': 'openUrl', catalogId: BASIC, args: { url: 'https://a2ui.org' } } } }),
+};
+
+// ---------- 画面 ----------
+const root = createRoot(document.getElementById('app')!);
+function short(m: any) { const k = Object.keys(m).find(k => k !== 'version')!; return `${k} ${JSON.stringify(m[k]).slice(0, 220)}`; }
+function render() {
+  const s = renderer.getSurface?.('seat');
+  root.render(<div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: 24, fontFamily: 'system-ui, sans-serif' }}>
+    <div><h3 style={{ margin: '0 0 8px' }}>Renderer（@a2ui/react）</h3>{s ? <A2uiSurface surface={s} /> : <em>no surface</em>}</div>
+    <div><h3 style={{ margin: '0 0 8px' }}>Wire log（A2UI 1.0 messages）</h3>
+      <ol style={{ fontFamily: 'ui-monospace, monospace', fontSize: 11, paddingLeft: 18 }}>
+        {wire.map((w, i) => <li key={i} style={{ marginBottom: 4, color: w.dir.startsWith('agent') ? '#1a56db' : '#b45309' }}><b>{w.dir}</b> {short(w.m)}</li>)}
+      </ol></div>
+  </div>);
+}
+render();

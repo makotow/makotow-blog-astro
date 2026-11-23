@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "catalogId": "https://example.com/a2ui/travel/v1/catalog.json",
+  "protocolVersion": "1.0",
+  "title": "Travel functions",
+  "components": {},
+  "functions": {
+    "checkSeat": {
+      "type": "object",
+      "description": "座席が空いているかをエージェント側の予約システムで確認する。",
+      "returnType": "boolean",
+      "unevaluatedProperties": false,
+      "properties": {
+        "@call": {
+          "const": "checkSeat"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "flight": {
+              "$ref": "common_types.json#/$defs/DynamicString"
+            },
+            "seat": {
+              "$ref": "common_types.json#/$defs/DynamicString"
+            }
+          },
+          "required": ["flight", "seat"],
+          "unevaluatedProperties": false
+        }
+      },
+      "required": ["@call", "args"]
+    },
+    "getViewport": {
+      "type": "object",
+      "description": "レンダラーの表示領域サイズを返す（エージェントから呼び出し可）。",
+      "returnType": "object",
+      "allowedCallers": "rendererOrAgent",
+      "unevaluatedProperties": false,
+      "properties": {
+        "@call": {
+          "const": "getViewport"
+        },
+        "args": {
+          "type": "object",
+          "properties": {},
+          "unevaluatedProperties": false
+        }
+      },
+      "required": ["@call"]
+    }
+  },
+  "$defs": {}
+}
