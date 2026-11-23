@@ -1,0 +1,8 @@
+/article-assets/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/article-assets/*.txt
+  Content-Type: text/plain; charset=utf-8
+
+/article-assets/*.json
+  Content-Type: application/json; charset=utf-8
