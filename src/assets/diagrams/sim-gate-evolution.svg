@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="660" viewBox="0 0 800 660" role="img" aria-labelledby="title desc">
+  <title id="title">同じ完了ゲートを引き継いだときのSIMあり・なしの分岐</title>
+  <desc id="desc">TB2.1で構築した同じExecutionGatingInterlockをTB4へ引き継いだ比較。SIMありは元の導入意図P5を保ったまま最適性確認P8や仕様監査を積み上げてスコアを伸ばす。SIMなしは意図を知らずゲートを厳格化して完了デッドロックを2度起こし、起源も誤認したままスコア増分ゼロに終わる。</desc>
+  <defs>
+    <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#0f766e"/>
+    </marker>
+    <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#b45309"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="660" rx="16" fill="#f8fafc"/>
+
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif" fill="#0f172a">
+    <text x="400" y="36" text-anchor="middle" font-size="20" font-weight="700">同じ「完了ゲート」を引き継いだときの分岐（Terminus-2: TB2.1 → TB4）</text>
+
+    <!-- Common Starting Point -->
+    <rect x="24" y="54" width="752" height="92" rx="10" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+    <text x="400" y="82" text-anchor="middle" font-size="16" font-weight="700">共通の出発点：TB2.1で進化した ExecutionGatingInterlock（開始スコア 19.39）</text>
+    <text x="400" y="108" text-anchor="middle" font-size="14" fill="#334155">ソース課題（P5）：未実行・エラー放置での完了宣言を防ぐ4経路の完了拒否ゲート</text>
+    <text x="400" y="132" text-anchor="middle" font-size="14" fill="#475569">TB4の新課題：制約チェック通過後に「実行可能だが最適でない解」で早期終了</text>
+
+    <!-- Branch arrows -->
+    <path d="M206 146V174" fill="none" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow-teal)"/>
+    <path d="M594 146V174" fill="none" stroke="#b45309" stroke-width="2" marker-end="url(#arrow-amber)"/>
+
+    <!-- Left Column: With SIM -->
+    <rect x="24" y="180" width="364" height="458" rx="12" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>
+    <rect x="24" y="180" width="364" height="46" rx="12" fill="#ccfbf1"/>
+    <rect x="24" y="212" width="364" height="14" fill="#ccfbf1"/>
+    <text x="206" y="210" text-anchor="middle" font-size="16" font-weight="700" fill="#134e4a">Full SIM あり（コード ＋ P5等）</text>
+
+    <rect x="40" y="240" width="332" height="72" rx="8" fill="#f0fdfa" stroke="#5eead4"/>
+    <text x="54" y="266" font-size="14.5" font-weight="700" fill="#115e59">R1：P5の意図を保ち仕様監査を追加</text>
+    <text x="54" y="292" font-size="14" fill="#334155">元の実行確認ゲートは壊さず維持</text>
+
+    <rect x="40" y="322" width="332" height="72" rx="8" fill="#f0fdfa" stroke="#5eead4"/>
+    <text x="54" y="348" font-size="14.5" font-weight="700" fill="#115e59">R2：P8を開設し最適性確認を追加</text>
+    <text x="54" y="374" font-size="14" fill="#334155">制約通過だけでなく理論下限比較を促す</text>
+
+    <rect x="40" y="404" width="332" height="72" rx="8" fill="#f0fdfa" stroke="#5eead4"/>
+    <text x="54" y="430" font-size="14.5" font-weight="700" fill="#115e59">R3〜R9：周辺検証を段階的に拡張</text>
+    <text x="54" y="456" font-size="14" fill="#334155">tmux修正・外部契約(P3)・状態確認</text>
+
+    <rect x="40" y="486" width="332" height="68" rx="8" fill="#f0fdfa" stroke="#5eead4"/>
+    <text x="54" y="512" font-size="14" fill="#334155">※P8のR2/R4自体は予測的中 0/4 だが、</text>
+    <text x="54" y="536" font-size="14" fill="#334155">自爆を防ぎ他改修へ予算を使い記録も保持</text>
+
+    <rect x="40" y="566" width="332" height="58" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+    <text x="206" y="590" text-anchor="middle" font-size="15" font-weight="700" fill="#14532d">結果：TB4 最終スコア 21.82（+2.43）</text>
+    <text x="206" y="612" text-anchor="middle" font-size="14" fill="#166534">デッドロックなし／10ペア平均 +2.36pt</text>
+
+    <!-- Right Column: Without SIM -->
+    <rect x="412" y="180" width="364" height="458" rx="12" fill="#ffffff" stroke="#b45309" stroke-width="2"/>
+    <rect x="412" y="180" width="364" height="46" rx="12" fill="#fef3c7"/>
+    <rect x="412" y="212" width="364" height="14" fill="#fef3c7"/>
+    <text x="594" y="210" text-anchor="middle" font-size="16" font-weight="700" fill="#78350f">SIM なし（コードのみ引き継ぎ）</text>
+
+    <rect x="428" y="240" width="332" height="72" rx="8" fill="#fffbeb" stroke="#fcd34d"/>
+    <text x="442" y="266" font-size="14.5" font-weight="700" fill="#92400e">R1：背景を知らずゲートを厳格化</text>
+    <text x="442" y="292" font-size="14" fill="#334155">エラー検出を強め完了不能リスク発生</text>
+
+    <rect x="428" y="322" width="332" height="72" rx="8" fill="#fef2f2" stroke="#fca5a5"/>
+    <text x="442" y="348" font-size="14.5" font-weight="700" fill="#991b1b">R3：完了デッドロックを修復(1回目)</text>
+    <text x="442" y="374" font-size="14" fill="#334155">ゲート起源を「自分のR1変更」と誤認</text>
+
+    <rect x="428" y="404" width="332" height="72" rx="8" fill="#fffbeb" stroke="#fcd34d"/>
+    <text x="442" y="430" font-size="14.5" font-weight="700" fill="#92400e">R5：ターン横断の失敗ラッチを追加</text>
+    <text x="442" y="456" font-size="14" fill="#334155">テスト失敗状態を保持し続ける条件を追加</text>
+
+    <rect x="428" y="486" width="332" height="68" rx="8" fill="#fef2f2" stroke="#fca5a5"/>
+    <text x="442" y="512" font-size="14.5" font-weight="700" fill="#991b1b">R7：ラッチ起因デッドロック修復(2回目)</text>
+    <text x="442" y="536" font-size="14" fill="#334155">ゲート改修4回のうち2回を尻拭いに消費</text>
+
+    <rect x="428" y="566" width="332" height="58" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+    <text x="594" y="590" text-anchor="middle" font-size="15" font-weight="700" fill="#7f1d1d">結果：TB4 最終スコア 19.39（+0.00）</text>
+    <text x="594" y="612" text-anchor="middle" font-size="14" fill="#991b1b">10ラウンド回しても開始時から伸びず停滞</text>
+  </g>
+</svg>

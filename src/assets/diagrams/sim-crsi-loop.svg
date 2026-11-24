@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="620" viewBox="0 0 800 620" role="img" aria-labelledby="title desc">
+  <title id="title">SIMを組み込んだ継続的RSI（CRSI）の最適化ループ</title>
+  <desc id="desc">ソース環境のRSIで得た進化済みハーネスとSelf-Improvement Memory（SIM）をターゲット環境へ引き継ぐ。ターゲットRSIではEvaluatorの実行フィードバックと履歴に加え、ProposerとSelectorの双方がSIM全文を参照して変更を提案・選別し、採用した変更と実測結果をSIMへ追記する。Held-out評価は最適化ループの外に置かれる。</desc>
+  <defs>
+    <marker id="arrow-slate" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#475569"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#0f766e"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="620" rx="16" fill="#f8fafc"/>
+
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif" fill="#0f172a">
+    <text x="400" y="36" text-anchor="middle" font-size="20" font-weight="700">SIMを組み込んだ継続的RSI（CRSI）の最適化ループ</text>
+
+    <!-- Source handoff banner -->
+    <rect x="24" y="54" width="752" height="72" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5"/>
+    <text x="400" y="82" text-anchor="middle" font-size="16" font-weight="700" fill="#0c4a6e">ソース環境からの引き継ぎ（モデル変更 または タスク・データ変更）</text>
+    <text x="400" y="108" text-anchor="middle" font-size="14.5" fill="#0369a1">進化済みハーネス H_S ＋ 改善の記憶 SIM（M_S）をセットで渡す</text>
+
+    <path d="M400 126V150" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+    <!-- Outer Target RSI container -->
+    <rect x="24" y="156" width="752" height="390" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+    <text x="42" y="182" font-size="14.5" font-weight="700" fill="#475569">ターゲット環境の最適化ループ（Evolve-setのみ使用・Nラウンド反復）</text>
+
+    <!-- Top row: Evaluator -> Proposer -> Selector -->
+    <!-- Evaluator -->
+    <rect x="40" y="198" width="218" height="114" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+    <text x="149" y="225" text-anchor="middle" font-size="16.5" font-weight="700">1. Evaluator</text>
+    <text x="149" y="251" text-anchor="middle" font-size="14" fill="#334155">固定モデル M を H_t で実行</text>
+    <text x="149" y="273" text-anchor="middle" font-size="14" fill="#334155">スコア・エラー等を収集</text>
+    <text x="149" y="295" text-anchor="middle" font-size="14" fill="#64748b">履歴 D_t（ログ・差分）</text>
+
+    <!-- Arrow Evaluator -> Proposer -->
+    <path d="M258 255H286" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+    <!-- Proposer -->
+    <rect x="292" y="198" width="218" height="114" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="401" y="225" text-anchor="middle" font-size="16.5" font-weight="700" fill="#1e3a8a">2. Proposer</text>
+    <text x="401" y="251" text-anchor="middle" font-size="14" fill="#1e40af">コード・履歴・SIMを参照</text>
+    <text x="401" y="273" text-anchor="middle" font-size="14" fill="#1e40af">k個の改修候補と根拠を提案</text>
+    <text x="401" y="295" text-anchor="middle" font-size="14" fill="#1d4ed8">評価前に直るタスクを予測</text>
+
+    <!-- Arrow Proposer -> Selector -->
+    <path d="M510 255H538" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+    <!-- Selector -->
+    <rect x="544" y="198" width="218" height="114" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="653" y="225" text-anchor="middle" font-size="16.5" font-weight="700" fill="#1e3a8a">3. Selector</text>
+    <text x="653" y="251" text-anchor="middle" font-size="14" fill="#1e40af">事前スクリーニングと検証</text>
+    <text x="653" y="273" text-anchor="middle" font-size="14" fill="#1e40af">SIMを参照し採用案を決定</text>
+    <text x="653" y="295" text-anchor="middle" font-size="14" fill="#1d4ed8">性能・複雑さ・回帰を比較</text>
+
+    <!-- SIM Box (Center highlight) -->
+    <rect x="236" y="352" width="368" height="122" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>
+    <text x="420" y="380" text-anchor="middle" font-size="16" font-weight="700" fill="#134e4a">Self-Improvement Memory（SIM / M_t）</text>
+    <text x="420" y="406" text-anchor="middle" font-size="14" fill="#115e59">・根本原因（Root Cause）ごとに試行履歴を整理</text>
+    <text x="420" y="430" text-anchor="middle" font-size="14" fill="#115e59">・変更根拠 ／ 事前予測と実測（失敗含む）</text>
+    <text x="420" y="454" text-anchor="middle" font-size="14" fill="#0f766e">・出自（ドメイン・モデル・設定・ラウンド）</text>
+
+    <!-- Dashed read arrows: SIM -> Proposer, SIM -> Selector -->
+    <path d="M401 352V319" fill="none" stroke="#0f766e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-teal)"/>
+    <text x="362" y="339" text-anchor="middle" font-size="14" font-weight="600" fill="#0f766e">全文参照</text>
+
+    <path d="M520 352V334H624V319" fill="none" stroke="#0f766e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-teal)"/>
+    <text x="568" y="328" text-anchor="middle" font-size="14" font-weight="600" fill="#0f766e">全文参照</text>
+
+    <!-- Solid update arrow: Selector -> SIM -->
+    <path d="M696 312V413H612" fill="none" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow-teal)"/>
+    <text x="678" y="436" text-anchor="middle" font-size="14" font-weight="600" fill="#0f766e">採用変更と実測を</text>
+    <text x="678" y="456" text-anchor="middle" font-size="14" font-weight="600" fill="#0f766e">SIMへ追記</text>
+
+    <!-- Retained harness loop back -->
+    <rect x="40" y="376" width="174" height="72" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+    <text x="127" y="406" text-anchor="middle" font-size="15.5" font-weight="700" fill="#92400e">採用ハーネス H_t+1</text>
+    <text x="127" y="430" text-anchor="middle" font-size="14" fill="#92400e">不採用なら H_t を維持</text>
+
+    <!-- Selector -> Retained harness -> Evaluator -->
+    <path d="M744 312V506H127V456" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+    <text x="440" y="528" text-anchor="middle" font-size="14" fill="#475569">次ラウンドへ引き継ぎ（H_t+1 と更新済み SIM）</text>
+    <path d="M127 376V319" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+    <!-- Held-out evaluation outside loop -->
+    <rect x="24" y="560" width="752" height="46" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <text x="400" y="588" text-anchor="middle" font-size="14" font-weight="600" fill="#334155">Held-out 評価セットはループ外に隔離（最適化器に見せず開始・最終測定のみ使用）</text>
+  </g>
+</svg>
