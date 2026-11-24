@@ -79,8 +79,34 @@
 
     /* Wide tables scroll inside this wrapper (see rehypeTableScroll). */
     .table-scroll {
-      @apply my-6 max-w-full overflow-x-auto focus-visible:outline-2 focus-visible:outline-dashed;
+      @apply focus-visible:outline-accent my-6 max-w-full overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dashed;
       -webkit-overflow-scrolling: touch;
+      background-image:
+        linear-gradient(to right, var(--background), var(--background)),
+        linear-gradient(to right, var(--background), var(--background)),
+        linear-gradient(
+          to right,
+          color-mix(in srgb, var(--foreground) 16%, transparent),
+          transparent
+        ),
+        linear-gradient(
+          to left,
+          color-mix(in srgb, var(--foreground) 16%, transparent),
+          transparent
+        );
+      background-position:
+        left center,
+        right center,
+        left center,
+        right center;
+      background-repeat: no-repeat;
+      background-color: var(--background);
+      background-size:
+        20px 100%,
+        20px 100%,
+        12px 100%,
+        12px 100%;
+      background-attachment: local, local, scroll, scroll;
 
       > table {
         @apply my-0;
@@ -102,6 +128,18 @@
 
       th {
         @apply py-1.5 whitespace-nowrap;
+      }
+
+      th[align="right"],
+      td[align="right"] {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      th[align="center"],
+      td[align="center"] {
+        text-align: center;
       }
 
       &:has(th:nth-child(4)) {

@@ -1,14 +1,20 @@
 import type { Element, Root, RootContent } from "hast";
 
 const WRAPPER_CLASS = "table-scroll";
+const SCROLL_WRAPPER_CLASSES = new Set([WRAPPER_CLASS, "overflow-x-auto"]);
 
 function isElement(node: RootContent | Root): node is Element {
   return node.type === "element";
 }
 
 function isWrapper(node: Element) {
-  const className = node.properties?.className;
-  return Array.isArray(className) && className.includes(WRAPPER_CLASS);
+  const className: unknown = node.properties?.className;
+  const classes: string[] = Array.isArray(className)
+    ? className.map(String)
+    : typeof className === "string"
+      ? className.split(/\s+/)
+      : [];
+  return classes.some(cls => SCROLL_WRAPPER_CLASSES.has(cls));
 }
 
 function wrapTables(parent: Root | Element) {
@@ -18,7 +24,12 @@ function wrapTables(parent: Root | Element) {
       return {
         type: "element",
         tagName: "div",
-        properties: { className: [WRAPPER_CLASS], tabIndex: 0 },
+        properties: {
+          className: [WRAPPER_CLASS],
+          role: "region",
+          ariaLabel: "スクロール可能な表",
+          tabIndex: 0,
+        },
         children: [child],
       } satisfies Element;
     }
@@ -28,9 +39,9 @@ function wrapTables(parent: Root | Element) {
 }
 
 /**
- * Wraps every Markdown table in a horizontally scrollable container so wide
- * tables scroll inside the article instead of squeezing columns on mobile.
- * `tabindex="0"` keeps the scroll area reachable from the keyboard.
+ * Wraps every Markdown table in an accessible, horizontally scrollable
+ * container (`role="region"`, `aria-label`, `tabindex="0"`) so wide tables
+ * scroll inside the article instead of squeezing columns on mobile.
  */
 export default function rehypeTableScroll() {
   return (tree: Root) => {
