@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="608" viewBox="0 0 800 608" role="img" aria-labelledby="title desc">
+  <title id="title">GUARDの全体像：適応フェーズの4段階閉ループと本番時の割り切り</title>
+  <desc id="desc">Turn 0で公開プロンプトとツール定義・スキーマから二値チェックリストを生成し、モデルの重みを凍結したままSelf-Review、Analyze、Propose、Gateの4段階閉ループでMarkdownハーネスを進化させる。本番・テスト時は適応ループを完全停止し、凍結した単一ハーネスW_Tだけで1回実行（pass@1）する。</desc>
+  <defs>
+    <marker id="arrow-slate" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#475569"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#0f766e"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="608" rx="16" fill="#f8fafc"/>
+
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif" fill="#0f172a">
+    <text x="400" y="34" text-anchor="middle" font-size="18.5" font-weight="700">GUARDの全体像：適応フェーズの4段階閉ループと本番時の割り切り</text>
+
+    <!-- Turn 0 Banner -->
+    <rect x="28" y="52" width="744" height="60" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5"/>
+    <text x="400" y="77" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0c4a6e">Turn 0（実行前準備）：公開プロンプト＋ツール定義・スキーマから二値チェックリスト C(q) を生成・固定</text>
+    <text x="400" y="99" text-anchor="middle" font-size="12" fill="#0369a1">※ 正解ラベル・外部採点器・隠れテストケースは一切使用しない（Grader-free / Reference-free）</text>
+
+    <path d="M400 112V134" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+    <!-- Outer Adaptation Loop Container -->
+    <rect x="28" y="140" width="744" height="350" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+    <text x="46" y="164" font-size="12.5" font-weight="700" fill="#475569">適応フェーズの閉ループ（モデル重み π_θ は凍結し、Markdownハーネス W_{t,g} のみ更新）</text>
+
+    <!-- 1. Self-Review (Top Left) -->
+    <rect x="48" y="180" width="326" height="114" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+    <text x="211" y="205" text-anchor="middle" font-size="14.5" font-weight="700">1. Self-Review（2層セルフレビュー）</text>
+    <text x="211" y="229" text-anchor="middle" font-size="12" fill="#334155">Layer 1：決定的サンドボックス検証（エラー・ID）</text>
+    <text x="211" y="250" text-anchor="middle" font-size="12" fill="#334155">Layer 2：項目別の意味検証（トレースからYES/NO）</text>
+    <text x="211" y="274" text-anchor="middle" font-size="11.5" fill="#475569">「生成より検証が易しい」非対称性を活用</text>
+
+    <!-- Arrow 1 -> 2 -->
+    <path d="M374 237H420" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+    <text x="398" y="226" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">採点結果</text>
+
+    <!-- 2. Analyze (Top Right) -->
+    <rect x="426" y="180" width="326" height="114" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="589" y="205" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1e3a8a">2. Analyze（方向付きリグレット分析）</text>
+    <text x="589" y="229" text-anchor="middle" font-size="12" fill="#1e40af">前版 W_{t-2} と現版 W_{t-1} の遵守率を比較</text>
+    <text x="589" y="250" text-anchor="middle" font-size="12" fill="#1e40af">退行(2) ／ 未解決(1) ／ 習得済み(0・ピン留め)</text>
+    <text x="589" y="274" text-anchor="middle" font-size="11.5" fill="#1d4ed8">成功・失敗トレース対 (τ+, τ-) も抽出</text>
+
+    <!-- Arrow 2 -> 3 -->
+    <path d="M589 294V338" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+    <text x="599" y="321" text-anchor="start" font-size="11" font-weight="600" fill="#475569">リグレット束 ＋ ピン留め</text>
+
+    <!-- 3. Propose (Bottom Right) -->
+    <rect x="426" y="344" width="326" height="126" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="589" y="369" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1e3a8a">3. Propose（並列プーリング &amp; 進化）</text>
+    <text x="589" y="392" text-anchor="middle" font-size="12" fill="#1e40af">M 個の候補ハーネスを並列生成・同一バッチ評価</text>
+    <text x="589" y="412" text-anchor="middle" font-size="12" fill="#1e40af">グループ相対スコア Â_m で勝者選抜（Critic不要）</text>
+    <text x="589" y="434" text-anchor="middle" font-size="11.5" fill="#1d4ed8">ContrastEvolve：最良 m+ と最悪 m- の対比で</text>
+    <text x="589" y="453" text-anchor="middle" font-size="11.5" fill="#1d4ed8">次ラウンドの提案プロンプト（s+ / s-）を進化</text>
+
+    <!-- Arrow 3 -> 4 -->
+    <path d="M426 407H380" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+    <text x="401" y="396" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">勝者候補</text>
+
+    <!-- 4. Gate (Bottom Left) -->
+    <rect x="48" y="344" width="326" height="126" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>
+    <text x="211" y="369" text-anchor="middle" font-size="14.5" font-weight="700" fill="#134e4a">4. Gate（Soft-HURT昇格ゲート）</text>
+    <text x="211" y="392" text-anchor="middle" font-size="12" fill="#115e59">平均改善 &gt; 劣化ペナルティ Hurt の場合のみ昇格</text>
+    <text x="211" y="412" text-anchor="middle" font-size="12" fill="#115e59">少数の孤立退行は [iff] で条件を絞って1回修復</text>
+    <text x="211" y="434" text-anchor="middle" font-size="11.5" fill="#0f766e">却下時は W_{t-1} を維持し棄却台帳 L_g に記録</text>
+    <text x="211" y="453" text-anchor="middle" font-size="11.5" fill="#0f766e">プレイブック長・台帳長とも O(1) で肥大化防止</text>
+
+    <!-- Arrow 4 -> 1 -->
+    <path d="M211 344V300" fill="none" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow-teal)"/>
+    <text x="221" y="325" text-anchor="start" font-size="11" font-weight="600" fill="#0f766e">次ラウンドの W_t（＋棄却台帳）</text>
+
+    <!-- Deploy arrow -->
+    <path d="M400 490V522" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-slate)"/>
+    <text x="412" y="511" text-anchor="start" font-size="11.5" font-weight="600" fill="#475569">適応完了後、最終ハーネス W_T を凍結</text>
+
+    <!-- Production / Test Phase -->
+    <rect x="28" y="528" width="744" height="60" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <text x="400" y="553" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">本番・テストフェーズ（適応ループを完全停止）</text>
+    <text x="400" y="575" text-anchor="middle" font-size="12" fill="#78350f">自己レビュー・候補プーリング・棄却台帳をすべてオフにし、凍結された単一ハーネス W_T で 1回実行（pass@1）</text>
+  </g>
+</svg>
