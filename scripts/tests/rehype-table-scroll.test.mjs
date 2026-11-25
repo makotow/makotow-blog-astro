@@ -36,6 +36,8 @@ test("wraps top-level and nested table nodes in div.table-scroll with tabindex",
   assert.equal(tree.children[0].tagName, "div");
   assert.deepEqual(tree.children[0].properties, {
     className: ["table-scroll"],
+    role: "region",
+    ariaLabel: "スクロール可能な表",
     tabIndex: 0,
   });
   assert.equal(tree.children[0].children[0].tagName, "table");
@@ -44,6 +46,8 @@ test("wraps top-level and nested table nodes in div.table-scroll with tabindex",
   assert.equal(nestedSection.children[0].tagName, "div");
   assert.deepEqual(nestedSection.children[0].properties, {
     className: ["table-scroll"],
+    role: "region",
+    ariaLabel: "スクロール可能な表",
     tabIndex: 0,
   });
   assert.equal(nestedSection.children[0].children[0].tagName, "table");
@@ -72,6 +76,71 @@ test("does not double-wrap tables already inside div.table-scroll", () => {
   rehypeTableScroll()(tree);
 
   assert.equal(tree.children[0].tagName, "div");
+  assert.equal(tree.children[0].children[0].tagName, "table");
+});
+
+test("does not double-wrap tables inside overflow-x-auto containers", () => {
+  const tree = {
+    type: "root",
+    children: [
+      {
+        type: "element",
+        tagName: "div",
+        properties: { className: ["overflow-x-auto"] },
+        children: [
+          {
+            type: "element",
+            tagName: "table",
+            properties: {},
+            children: [],
+          },
+        ],
+      },
+      {
+        type: "element",
+        tagName: "div",
+        properties: { className: "my-4 overflow-x-auto" },
+        children: [
+          {
+            type: "element",
+            tagName: "table",
+            properties: {},
+            children: [],
+          },
+        ],
+      },
+    ],
+  };
+
+  rehypeTableScroll()(tree);
+
+  assert.equal(tree.children[0].children[0].tagName, "table");
+  assert.equal(tree.children[1].children[0].tagName, "table");
+});
+
+test("leaves tables inside MDX ResponsiveTable wrapper untouched", () => {
+  const tree = {
+    type: "root",
+    children: [
+      {
+        type: "mdxJsxFlowElement",
+        name: "ResponsiveTable",
+        attributes: [],
+        children: [
+          {
+            type: "element",
+            tagName: "table",
+            properties: {},
+            children: [],
+          },
+        ],
+      },
+    ],
+  };
+
+  rehypeTableScroll()(tree);
+
+  assert.equal(tree.children[0].type, "mdxJsxFlowElement");
   assert.equal(tree.children[0].children[0].tagName, "table");
 });
 
