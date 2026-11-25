@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480" role="img" aria-labelledby="title desc">
+  <title id="title">Soft-HURT昇格ゲートと [iff] 局所修復の判定フロー</title>
+  <desc id="desc">Proposeで選ばれた勝者候補を前版と比較し、平均スコア改善がノイズ床超えの平均劣化ペナルティHurtを上回ればそのまま昇格する。未達でも孤立した少数タスクの退行のみであれば、[iff]条件で適用範囲を狭めて1回だけ修復・再評価し、通過すれば昇格、不合格や大規模退行は棄却台帳へ記録して現状を維持する。</desc>
+  <defs>
+    <marker id="arrow-slate" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#475569"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#15803d"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#0f766e"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#b91c1c"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="480" rx="16" fill="#f8fafc"/>
+
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif" fill="#0f172a">
+    <text x="400" y="34" text-anchor="middle" font-size="18.5" font-weight="700">Soft-HURT昇格ゲートと [iff] 局所修復の判定フロー</text>
+
+    <!-- Input Box -->
+    <rect x="130" y="52" width="540" height="54" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+    <text x="400" y="75" text-anchor="middle" font-size="13" font-weight="700">Proposeで選ばれた勝者候補 W̃_t を前版 W_{t-1} と同一バッチで比較</text>
+    <text x="400" y="96" text-anchor="middle" font-size="12" fill="#334155">ノイズ床（15点）超えの劣化タスク集合 Q- から平均劣化ペナルティ Hurt を算出</text>
+
+    <path d="M400 106V128" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+    <!-- Decision 1 -->
+    <rect x="130" y="134" width="540" height="54" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="400" y="157" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1e3a8a">判定1：平均スコア改善 &gt; 平均劣化ペナルティ Hurt（かつ許容条件内）か？</text>
+    <text x="400" y="178" text-anchor="middle" font-size="12" fill="#1e40af">|Q-| ≤ h_max かつ 改善幅 &gt; Hurt（|Q-| &gt; 0 時は μ_min も超過）</text>
+
+    <!-- Branch Left (Yes) -->
+    <path d="M136 188V224" fill="none" stroke="#15803d" stroke-width="2" marker-end="url(#arrow-green)"/>
+    <text x="146" y="211" text-anchor="start" font-size="11.5" font-weight="700" fill="#15803d">Yes（基準達成）</text>
+
+    <!-- Branch Right (No) -->
+    <path d="M530 188V224" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+    <text x="540" y="211" text-anchor="start" font-size="11.5" font-weight="700" fill="#475569">No</text>
+
+    <!-- Promote Box -->
+    <rect x="28" y="230" width="216" height="84" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+    <text x="136" y="256" text-anchor="middle" font-size="15" font-weight="700" fill="#14532d">昇格（採用）</text>
+    <text x="136" y="280" text-anchor="middle" font-size="12" fill="#166534">W_t ← W̃_t（または修復版）</text>
+    <text x="136" y="300" text-anchor="middle" font-size="11.5" fill="#166534">改善が劣化を上回る更新のみ採用</text>
+
+    <!-- Decision 2 -->
+    <rect x="286" y="230" width="486" height="62" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5"/>
+    <text x="529" y="254" text-anchor="middle" font-size="13" font-weight="700" fill="#0c4a6e">判定2：孤立した少数タスクの退行のみか？（1 ≤ |Q-| ≤ h_rep）</text>
+    <text x="529" y="276" text-anchor="middle" font-size="11.5" fill="#0369a1">問題ルールの適用範囲が広すぎるだけなら、即座に捨てず局所修復を試す</text>
+
+    <!-- Decision 2 -> Repair (Yes) -->
+    <path d="M391 292V326" fill="none" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow-teal)"/>
+    <text x="401" y="314" text-anchor="start" font-size="11.5" font-weight="700" fill="#0f766e">Yes（孤立退行）</text>
+
+    <!-- Decision 2 -> Reject (No) -->
+    <path d="M667 292V326" fill="none" stroke="#b91c1c" stroke-width="2" marker-end="url(#arrow-red)"/>
+    <text x="677" y="314" text-anchor="start" font-size="11.5" font-weight="700" fill="#b91c1c">No</text>
+
+    <!-- Repair Box -->
+    <rect x="276" y="332" width="230" height="84" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="1.5"/>
+    <text x="391" y="358" text-anchor="middle" font-size="13.5" font-weight="700" fill="#134e4a">[iff] 局所修復（最大1回）</text>
+    <text x="391" y="380" text-anchor="middle" font-size="11.5" fill="#115e59">原因ルールに [iff &lt;条件&gt;] を付与</text>
+    <text x="391" y="400" text-anchor="middle" font-size="11.5" fill="#115e59">再実行し Soft-HURT で再判定</text>
+
+    <!-- Repair Pass -> Promote -->
+    <path d="M276 374H136V320" fill="none" stroke="#15803d" stroke-width="2" marker-end="url(#arrow-green)"/>
+    <text x="206" y="365" text-anchor="middle" font-size="11.5" font-weight="700" fill="#15803d">通過</text>
+
+    <!-- Repair Fail -> Reject -->
+    <path d="M506 374H556" fill="none" stroke="#b91c1c" stroke-width="2" marker-end="url(#arrow-red)"/>
+    <text x="531" y="364" text-anchor="middle" font-size="11" font-weight="700" fill="#b91c1c">不合格</text>
+
+    <!-- Reject Box -->
+    <rect x="562" y="332" width="210" height="84" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+    <text x="667" y="358" text-anchor="middle" font-size="14.5" font-weight="700" fill="#7f1d1d">棄却・現状維持</text>
+    <text x="667" y="380" text-anchor="middle" font-size="12" fill="#991b1b">W_t ← W_{t-1}</text>
+    <text x="667" y="400" text-anchor="middle" font-size="11.5" fill="#991b1b">棄却台帳 L_g へ記録（再発防止）</text>
+
+    <!-- Bottom Summary Strip -->
+    <rect x="28" y="434" width="744" height="32" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="400" y="454" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">効果：ゲート対象バッファで下向きドリフトゼロ（Theorem 1）／ ゲートを外すと5ドメイン平均 −10.35pp 悪化</text>
+  </g>
+</svg>
