@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="524" viewBox="0 0 800 524" role="img" aria-labelledby="title desc">
+  <title id="title">失敗シグナルの扱い方の違い：従来手法とGUARDの比較</title>
+  <desc id="desc">前回のハーネス編集後に新規退行（項目A）、未解決課題（項目B）、継続成功（項目C）が同時に観測されたとき、従来手法はAとBを混同して過剰発火や忘却・汚染を起こすのに対し、GUARDはAnalyzeで3分類してCをピン留めし、Proposeで[iff]条件を絞り、GateのSoft-HURTで非退行を担保する。</desc>
+  <defs>
+    <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#b45309"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8" fill="#0f766e"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="524" rx="16" fill="#f8fafc"/>
+
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif" fill="#0f172a">
+    <text x="400" y="34" text-anchor="middle" font-size="18.5" font-weight="700">失敗シグナルの扱い方の違い：従来手法 vs. GUARD</text>
+
+    <!-- Common Scenario -->
+    <rect x="28" y="52" width="744" height="72" rx="10" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+    <text x="400" y="79" text-anchor="middle" font-size="14.5" font-weight="700">共通の状況：前回のハーネス編集後、タスク群で次の3つが同時に観測された</text>
+    <text x="400" y="105" text-anchor="middle" font-size="12.5" fill="#334155">項目A：以前成功 → 今回失敗（新規退行） ／ 項目B：前回も今回も失敗（未解決） ／ 項目C：継続して成功</text>
+
+    <!-- Branch arrows -->
+    <path d="M209 124V150" fill="none" stroke="#b45309" stroke-width="2" marker-end="url(#arrow-amber)"/>
+    <path d="M591 124V150" fill="none" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow-teal)"/>
+
+    <!-- Left Column: Naive RSI -->
+    <rect x="28" y="156" width="362" height="346" rx="12" fill="#ffffff"/>
+    <rect x="28" y="156" width="362" height="40" rx="12" fill="#fef3c7"/>
+    <rect x="28" y="184" width="362" height="12" fill="#fef3c7"/>
+    <rect x="28" y="156" width="362" height="346" rx="12" fill="none" stroke="#b45309" stroke-width="2"/>
+    <text x="209" y="182" text-anchor="middle" font-size="14.5" font-weight="700" fill="#78350f">従来の自己改善（単一スコア・自由振り返り）</text>
+
+    <rect x="46" y="210" width="326" height="62" rx="8" fill="#fffbeb" stroke="#fcd34d"/>
+    <text x="209" y="234" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">1. 失敗シグナルが混ざる</text>
+    <text x="209" y="256" text-anchor="middle" font-size="12" fill="#334155">A（退行）とB（未解決）を同じ「失敗」として扱う</text>
+
+    <rect x="46" y="282" width="326" height="62" rx="8" fill="#fef2f2" stroke="#fca5a5"/>
+    <text x="209" y="306" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">2. 広すぎるルールを追記・上書き</text>
+    <text x="209" y="328" text-anchor="middle" font-size="12" fill="#334155">[always] 等の緩い指示で既存成功ケースまで壊す</text>
+
+    <rect x="46" y="354" width="326" height="62" rx="8" fill="#fffbeb" stroke="#fcd34d"/>
+    <text x="209" y="378" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">3. 項目Cの保護も昇格ゲートもない</text>
+    <text x="209" y="400" text-anchor="middle" font-size="12" fill="#334155">習得済みスキルが上書きされ、未検証ルールが肥大化</text>
+
+    <rect x="46" y="428" width="326" height="58" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+    <text x="209" y="451" text-anchor="middle" font-size="13.5" font-weight="700" fill="#7f1d1d">結果：過剰発火・破局的忘却・メモリ汚染</text>
+    <text x="209" y="472" text-anchor="middle" font-size="12" fill="#991b1b">ラウンドを重ねると初期状態 W_0 を下回ることも</text>
+
+    <!-- Right Column: GUARD -->
+    <rect x="410" y="156" width="362" height="346" rx="12" fill="#ffffff"/>
+    <rect x="410" y="156" width="362" height="40" rx="12" fill="#ccfbf1"/>
+    <rect x="410" y="184" width="362" height="12" fill="#ccfbf1"/>
+    <rect x="410" y="156" width="362" height="346" rx="12" fill="none" stroke="#0f766e" stroke-width="2"/>
+    <text x="591" y="182" text-anchor="middle" font-size="14.5" font-weight="700" fill="#134e4a">GUARD（方向付きリグレット ＋ Soft-HURT）</text>
+
+    <rect x="428" y="210" width="326" height="62" rx="8" fill="#f0fdfa" stroke="#5eead4"/>
+    <text x="591" y="234" text-anchor="middle" font-size="13" font-weight="700" fill="#115e59">1. Analyze：3分類とピン留め</text>
+    <text x="591" y="256" text-anchor="middle" font-size="12" fill="#334155">Aを退行(2)、Bを未解決(1)、Cを習得済み(0)に分離</text>
+
+    <rect x="428" y="282" width="326" height="62" rx="8" fill="#f0fdfa" stroke="#5eead4"/>
+    <text x="591" y="306" text-anchor="middle" font-size="13" font-weight="700" fill="#115e59">2. Propose：[iff] 条件で範囲を絞る</text>
+    <text x="591" y="328" text-anchor="middle" font-size="12" fill="#334155">並列候補を相対選抜し、Cを守りつつAを局所化</text>
+
+    <rect x="428" y="354" width="326" height="62" rx="8" fill="#f0fdfa" stroke="#5eead4"/>
+    <text x="591" y="378" text-anchor="middle" font-size="13" font-weight="700" fill="#115e59">3. Gate：Soft-HURT で非退行を担保</text>
+    <text x="591" y="400" text-anchor="middle" font-size="12" fill="#334155">「改善 &gt; 劣化ペナルティ」で昇格。外れは修復か台帳へ</text>
+
+    <rect x="428" y="428" width="326" height="58" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+    <text x="591" y="451" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14532d">結果：退行・忘却ゼロ ＋ コンパクト維持</text>
+    <text x="591" y="472" text-anchor="middle" font-size="12" fill="#166534">実行ゲート昇格 19/19 件が W_0 比で非退行</text>
+  </g>
+</svg>
